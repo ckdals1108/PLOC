@@ -6,6 +6,7 @@ import com.example.ploc.dto.LoginDTO;
 import com.example.ploc.repository.StudentRepository;
 import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
@@ -31,10 +33,12 @@ public class StudentService {
                 return chkStudent.get();
             }
             else{
-                throw new IllegalStateException("비밀번호가 틀립니다.");
+                log.info("비밀번호가 틀립니다.");
+                return null;
             }
         }else {
-            throw new IllegalStateException("해당하는 아이디가 없습니다.");
+            log.info("해당하는 아이디가 없습니다.");
+            return null;
         }
     }
 

@@ -1,11 +1,13 @@
 package com.example.ploc.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class LoginDTO {
     private String loginId;
     private String password;
+
+    public LoginDTO(){}
 
     public LoginDTO(String loginId, String password) {
         this.loginId = loginId;

@@ -15,10 +15,12 @@ spring:
 
 logging:
   level:
+    ploc:
+      springmvc: debug
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: debug
         type:
           descriptor:
             sql:
-              BasicBinder: TRACE
+              BasicBinder: trace

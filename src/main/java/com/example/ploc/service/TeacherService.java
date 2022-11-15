@@ -2,9 +2,11 @@ package com.example.ploc.service;
 
 import com.example.ploc.domain.Student;
 import com.example.ploc.domain.Teacher;
+import com.example.ploc.dto.LoginDTO;
 import com.example.ploc.repository.StudentRepository;
 import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
@@ -20,7 +23,7 @@ public class TeacherService {
         return studentRepository.findBySubject(teacher.getSubject());
     }
 
-    public Teacher join(Teacher teacher){
+    public Teacher join(LoginDTO teacher){
         Optional<Teacher> chkTeacher = teacherRepository.findByLoginId(teacher.getLoginId());
         if(chkTeacher.isPresent()){
             String originalPassword = chkTeacher.get().getPassword();
@@ -29,10 +32,12 @@ public class TeacherService {
                 return chkTeacher.get();
             }
             else{
-                throw new IllegalStateException("비밀번호가 틀립니다.");
+                log.info("비밀번호가 틀립니다.");
+                return null;
             }
         }else {
-            throw new IllegalStateException("해당하는 아이디가 없습니다.");
+            log.info("해당하는 아이디가 없습니다.");
+            return null;
         }
     }
 
