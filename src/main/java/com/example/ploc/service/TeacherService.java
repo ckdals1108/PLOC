@@ -19,8 +19,12 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
 
-    public List<Student> chooseStudent(Teacher teacher){
-        return studentRepository.findBySubject(teacher.getSubject());
+    public List<Teacher> chooseTeacher(Teacher teacher){
+        return teacherRepository.findBySubject(teacher.getSubject());
+    }
+
+    public List<Teacher> allTeacher(){
+        return teacherRepository.findByAll();
     }
 
     public Teacher join(LoginDTO teacher){

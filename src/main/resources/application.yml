@@ -15,8 +15,7 @@ spring:
 
 logging:
   level:
-    ploc:
-      springmvc: debug
+    com.example.ploc: debug
     org:
       hibernate:
         SQL: debug

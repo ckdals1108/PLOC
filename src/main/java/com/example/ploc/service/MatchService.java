@@ -4,6 +4,7 @@ import com.example.ploc.domain.Match;
 import com.example.ploc.domain.Student;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.repository.MatchRepository;
+import com.example.ploc.repository.StudentRepository;
 import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,9 @@ public class MatchService {
     EntityManager em;
 
     private final MatchRepository matchesRepository;
-    private final TeacherRepository teacherRepository;
 
-    private void match(Student student, Teacher teacher, int wageOfWeek, int dayOfWeek) {
+    public void match(Student student, Teacher teacher, int wageOfWeek, int dayOfWeek) {
         Match match = new Match(student, teacher, wageOfWeek, dayOfWeek);
-        em.persist(match);
+        matchesRepository.save(match);
     }
 }

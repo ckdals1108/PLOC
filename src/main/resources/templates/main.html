@@ -11,6 +11,8 @@
         <li><a href="/student/signup">학생 회원가입</a></li>
         <br/>
         <li><a href="/teacher/signup">대학생 회원가입</a></li>
+        <br/>
+        <li th:if="${isSession}"><a href="/matchTable">대학생 찾기</a> </li>
     </ul>
 </body>
 </html>

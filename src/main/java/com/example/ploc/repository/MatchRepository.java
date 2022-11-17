@@ -1,6 +1,7 @@
 package com.example.ploc.repository;
 
 import com.example.ploc.domain.Match;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 @Transactional
+@RequiredArgsConstructor
 public class MatchRepository {
     @PersistenceContext
     EntityManager em;

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>매칭</title>
+</head>
+<body>
+<a href="/"><input type=button value="홈으로"/></a>
+<table border="1">
+    <tr th:each="teacher : ${teacherList}">
+        <td th:text="${teacher.id}"></td>
+        <td th:text="${teacher.name}"></td>
+        <td th:text="${teacher.universityName}"></td>
+        <td th:text="${teacher.subject}"></td>
+        <td>
+            <form action="/chooseTeacher" method="post">
+                <input type="hidden" th:name="teacher" th:value="${teacher}"/>
+                <button type="submit">선택</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

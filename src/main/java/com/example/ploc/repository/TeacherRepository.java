@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,10 @@ public class TeacherRepository {
     public Teacher save(Teacher teacher){
         em.persist(teacher);
         return teacher;
+    }
+
+    public List<Teacher> findByAll(){
+        return em.createQuery("select t from Teacher t", Teacher.class).getResultList();
     }
 
     public Optional<Teacher> findById(Long id){
