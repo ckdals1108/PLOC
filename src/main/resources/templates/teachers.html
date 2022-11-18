@@ -13,7 +13,7 @@
         <td th:text="${teacher.universityName}"></td>
         <td th:text="${teacher.subject}"></td>
         <td>
-            <button type="submit" th:onclick="|location.href='@{/teacher{teacher.id}}'|">선택</button>
+            <button type="submit" th:onclick="|location.href='@{/teacher(id=teacher.id)}'|">선택</button>
         </td>
     </tr>
 </table>

@@ -9,8 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,15 +20,17 @@ import java.util.List;
 public class MatchController {
     private final TeacherService teacherService;
 
-    @RequestMapping("/matchTable")
+    @RequestMapping("/teachers")
     public String matching(Model model){
         List<Teacher> teachers = teacherService.allTeacher();
         model.addAttribute("teacherList", teachers);
-        return "matching";
+        return "teachers";
     }
 
-    @PostMapping("/chooseTeacher")
-    public String match(@ModelAttribute("teacher") Teacher teacher, Model model){
-        return "matching";
+    @PostMapping("/teacher")
+    public String match(@RequestParam Long id, Model model){
+        Optional<Teacher> teacher = teacherService.findById(id);
+
+        return "teacher";
     }
 }

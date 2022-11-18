@@ -1,6 +1,5 @@
 package com.example.ploc.service;
 
-import com.example.ploc.domain.Student;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.LoginDTO;
 import com.example.ploc.repository.StudentRepository;
@@ -19,9 +18,14 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
 
-    public List<Teacher> chooseTeacher(Teacher teacher){
+    public List<Teacher> findBySubject(Teacher teacher){
         return teacherRepository.findBySubject(teacher.getSubject());
     }
+
+    public Optional<Teacher> findById(Long id){
+        return teacherRepository.findById(id);
+    }
+
 
     public List<Teacher> allTeacher(){
         return teacherRepository.findByAll();
