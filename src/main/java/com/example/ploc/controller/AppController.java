@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServlet;
@@ -18,11 +19,12 @@ import javax.servlet.http.HttpSession;
 public class AppController {
     HttpSession session;
     @GetMapping("/")
-    public String home(Model model, HttpServletRequest request){
+    public String home(HttpServletRequest request, Model model){
         boolean isSession = true;
         session = request.getSession(false);
-        if(session == null)
+        if(session == null) {
             isSession = false;
+        }
         model.addAttribute("isSession", isSession);
         return "main";
     }

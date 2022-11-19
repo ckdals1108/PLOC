@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +21,13 @@ public class MatchService {
 
     private final MatchRepository matchesRepository;
 
-    public void match(Student student, Teacher teacher, int wageOfWeek, int dayOfWeek) {
+    public Match match(Student student, Teacher teacher, int wageOfWeek, int dayOfWeek) {
         Match match = new Match(student, teacher, wageOfWeek, dayOfWeek);
         matchesRepository.save(match);
+        return match;
+    }
+
+    public List<Match> findAll(){
+        return matchesRepository.findAll();
     }
 }

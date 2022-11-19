@@ -6,10 +6,13 @@ import com.example.ploc.dto.TeacherDTO;
 import com.example.ploc.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,4 +32,18 @@ public class TeacherController {
         teacherService.create(teacher);
         return "redirect:/";
     }
+
+    @RequestMapping("/teachers")
+    public String teacherList(Model model){
+        List<Teacher> teachers = teacherService.allTeacher();
+        model.addAttribute("teacherList", teachers);
+        return "teachers";
+    }
+
+    @GetMapping("/teacher")
+    public String findById(@RequestParam Long id, Model model){
+        model.addAttribute("teacher",teacherService.findById(id).get());
+        return "teacher";
+    }
+
 }

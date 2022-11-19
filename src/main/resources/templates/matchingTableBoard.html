@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>매칭</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <td>번호</td>
+        <td>이름</td>
+        <td>학교</td>
+        <td>과목</td>
+        <td>일급</td>
+        <td>주횟수</td>
+    </tr>
+    <tr>
+        <td th:text="${matchTableDTO.id}"></td>
+        <td th:text="${matchTableDTO.name}"></td>
+        <td th:text="${matchTableDTO.universityName}"></td>
+        <td th:text="${matchTableDTO.subject}"></td>
+        <td th:text="${matchTableDTO.wageOfWeek}"></td>
+        <td th:text="${matchTableDTO.dayOfWeek}"></td>
+    </tr>
+</table>
+<button th:onclick="|location.href='@{/}'|">홈으로</button>
+<button th:onclick="|location.href='@{/matchingTableList}'|">목록으로</button>
+
+</body>
+</html>

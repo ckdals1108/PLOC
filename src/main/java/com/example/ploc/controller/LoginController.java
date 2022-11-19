@@ -47,7 +47,7 @@ public class LoginController {
                 identity = "student";
             }
             session = request.getSession();
-            session.setAttribute("login", loginDTO);
+            session.setAttribute("login", signIn);
             session.setAttribute("identity", identity);
             return "redirect:/";
         } else {

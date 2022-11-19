@@ -5,15 +5,21 @@
     <title>매칭</title>
 </head>
 <body>
-<a href="/"><input type=button value="홈으로"/></a>
+<input th:onclick="|location.href='@{/}'|" type=button value="홈으로"/></a>
 <table border="1">
+    <tr>
+        <td>번호</td>
+        <td>이름</td>
+        <td>대학</td>
+        <td>과목</td>
+    </tr>
     <tr th:each="teacher : ${teacherList}">
         <td th:text="${teacher.id}"></td>
         <td th:text="${teacher.name}"></td>
         <td th:text="${teacher.universityName}"></td>
         <td th:text="${teacher.subject}"></td>
         <td>
-            <button type="submit" th:onclick="|location.href='@{/teacher(id=teacher.id)}'|">선택</button>
+            <button type="submit" th:onclick="|location.href='@{/teacher(id=${teacher.id})}'|">상세정보</button>
         </td>
     </tr>
 </table>

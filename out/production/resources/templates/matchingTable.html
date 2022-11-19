@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>매칭</title>
+</head>
+<body>
+<form th:action method="post">
+    <label>이름 : </label><input type="text" name="name" th:value="${teacher.name}" readonly/><br>
+    <label>학교 : </label><input type="text" name="universityName" th:value="${teacher.universityName}" readonly/><br>
+    <label>과목 : </label><input type="text" name="subject" th:value="${teacher.subject}" readonly/><br>
+    <label>일급 : </label><input type="text" name="wageOfWeek" /><br>
+    <label>주횟수 : </label><input type="text" name="dayOfWeek" />
+    <input type="hidden" name="id" th:value="${teacher.id}"/>
+    <button type="submit">매칭하기</button>
+</form>
+</body>
+</html>

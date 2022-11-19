@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -18,5 +19,9 @@ public class MatchRepository {
     public Match save(Match match) {
         em.persist(match);
         return match;
+    }
+
+    public List<Match> findAll(){
+        return em.createQuery("select m from Match m").getResultList();
     }
 }

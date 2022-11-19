@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>매칭</title>
+</head>
+<body>
+<table borde="1">
+    <tr>
+        <td>번호</td>
+        <td>일급</td>
+        <td>주횟수</td>
+    </tr>
+    <tr th:each="match : ${matchList}">
+        <td th:text="${match.id}"></td>
+        <td th:text="${match.wageOfWeek}"></td>
+        <td th:text="${match.dayOfWeek}"></td>
+    </tr>
+</table>
+<button th:onclick="|location.href='@{/}'|">홈으로</button>
+</body>
+</html>
