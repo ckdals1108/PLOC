@@ -29,8 +29,23 @@ public class MatchController {
     HttpSession session;
 
     @GetMapping("/matchingTableList")
-    public String matchingTableList(Model model){
-        List<Match> matchList = matchService.findAll();
+    public String matchingTableListForm(Model model, HttpServletRequest request){
+        session = request.getSession(false);
+        Student student = (Student)session.getAttribute("login");
+        List<MatchTableFormDTO> matchList = matchService.findByStudent(student);
+        model.addAttribute("matchList", matchList);
+        return "matchingTableList";
+    }
+
+    @PostMapping("/matchingTableList")
+    public String matchingTableList(@RequestParam("type") String type,
+                                    @RequestParam("search") String value,
+                                    Model model,
+                                    HttpServletRequest request){
+        log.debug("type={} search={}",type,value);
+        session = request.getSession(false);
+        Student student = (Student)session.getAttribute("login");
+        List<MatchTableFormDTO> matchList = matchService.findByStudentWithType(student, type, value);
         model.addAttribute("matchList", matchList);
         return "matchingTableList";
     }

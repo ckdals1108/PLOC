@@ -51,13 +51,13 @@ public class LoginController {
             session.setAttribute("identity", identity);
             return "redirect:/";
         } else {
-            return "login";
+            return "redirect:/login";
         }
     }
 
     @GetMapping("/logout")
-    public String logout(SessionStatus sessionStatus){
-        sessionStatus.setComplete();
+    public String logout(HttpServletRequest request){
+        request.getSession().invalidate();
         return "redirect:/";
     }
 }

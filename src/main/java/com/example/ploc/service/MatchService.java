@@ -3,6 +3,7 @@ package com.example.ploc.service;
 import com.example.ploc.domain.Match;
 import com.example.ploc.domain.Student;
 import com.example.ploc.domain.Teacher;
+import com.example.ploc.dto.MatchTableFormDTO;
 import com.example.ploc.repository.MatchRepository;
 import com.example.ploc.repository.StudentRepository;
 import com.example.ploc.repository.TeacherRepository;
@@ -29,5 +30,13 @@ public class MatchService {
 
     public List<Match> findAll(){
         return matchesRepository.findAll();
+    }
+
+    public List<MatchTableFormDTO> findByStudent(Student student){
+        return matchesRepository.findByStudent(student);
+    }
+
+    public List<MatchTableFormDTO> findByStudentWithType(Student student, String type, String value){
+        return matchesRepository.findByStudentWithType(student, type, value);
     }
 }

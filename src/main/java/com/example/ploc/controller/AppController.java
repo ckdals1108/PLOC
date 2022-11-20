@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,10 +21,16 @@ public class AppController {
     public String home(HttpServletRequest request, Model model){
         boolean isSession = true;
         session = request.getSession(false);
+        String identity = null;
         if(session == null) {
             isSession = false;
         }
+        else{
+            identity = (String)(request.getSession().getAttribute("identity"));
+
+        }
         model.addAttribute("isSession", isSession);
+        model.addAttribute("identity", identity);
         return "main";
     }
 }

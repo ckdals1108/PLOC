@@ -6,7 +6,8 @@
 </head>
 <body>
     <ul>
-        <li><a href="/login">로그인</a></li>
+        <li th:if="${!isSession}"><a href="/login">로그인</a></li>
+        <li th:unless="${!isSession}"><a href="/logout">로그아웃</a></li>
         <br/>
         <li><a href="/student/signup">학생 회원가입</a></li>
         <br/>
@@ -14,7 +15,7 @@
         <br/>
         <li th:if="${isSession}"><a href="/teachers">대학생 찾기</a> </li>
         <br/>
-        <li th:if="${isSession}"><a href="/matchingTableList">나의 매칭 보기</a> </li>
+        <li th:if="${isSession} and ${#strings.equals(#strings.toString(identity), 'student') }"><a href="/matchingTableList">나의 매칭 보기</a> </li>
     </ul>
 </body>
 </html>
