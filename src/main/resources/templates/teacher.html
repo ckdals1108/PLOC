@@ -2,25 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>매칭</title>
+    <title>대학생 상세정보</title>
 </head>
 <body>
-<input th:onclick="|location.href='@{/}'|" type=button value="홈으로"/></a>
 <table border="1">
     <tr>
-        <td th:text="이름"></td>
-        <td th:text="${teacher.name}"></td>
+        <td>이름</td>
+        <td th:text="${teacher.login.name}"></td>
     </tr>
     <tr>
-        <td th:text="대학"></td>
-        <td th:text="${teacher.universityName}"></td>
+        <td>학교</td>
+        <td th:text="${teacher.university}"></td>
     </tr>
     <tr>
-        <td th:text="과목"></td>
+        <td>과목</td>
         <td th:text="${teacher.subject}"></td>
     </tr>
-    <button type="submit" th:onclick="|location.href='@{/teacher/matchingTable(id=${teacher.id})}'|">선택</button>
-
 </table>
+<button th:onclick="|location.href='@{/}'|">홈으로</button>
+<button th:onclick="|location.href='@{/matching/{id}(id=${teacher.id})}'|">매칭하기</button>
 </body>
 </html>

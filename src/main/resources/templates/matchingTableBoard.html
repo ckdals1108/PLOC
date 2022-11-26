@@ -15,16 +15,16 @@
         <td>주횟수</td>
     </tr>
     <tr>
-        <td th:text="${matchTableDTO.id}"></td>
-        <td th:text="${matchTableDTO.name}"></td>
-        <td th:text="${matchTableDTO.universityName}"></td>
-        <td th:text="${matchTableDTO.subject}"></td>
-        <td th:text="${matchTableDTO.wageOfWeek}"></td>
-        <td th:text="${matchTableDTO.dayOfWeek}"></td>
+        <td th:text="${match.id}"></td>
+        <td th:text="${teacher.name}"></td>
+        <td th:text="${teacher.teacher.university}"></td>
+        <td th:text="${teacher.teacher.subject}"></td>
+        <td th:text="${match.wageOfDay}"></td>
+        <td th:text="${match.timesOfWeek}"></td>
     </tr>
 </table>
 <button th:onclick="|location.href='@{/}'|">홈으로</button>
-<button th:onclick="|location.href='@{/matchingTableList}'|">목록으로</button>
+<button th:onclick="|location.href='@{/matching}'|">목록으로</button>
 
 </body>
 </html>

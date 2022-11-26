@@ -6,28 +6,36 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-public class Teacher extends BaseLogin{
+public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="teacher_id")
     private Long id;
 
-    private String name;
-    private String universityName;
     private String subject;
+    private String university;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy="teacher")
-    private Match match;
+    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinColumn(name="login_login_id")
+    private Login login;
 
     protected Teacher() {
 
     }
 
-    public Teacher(String loginId, String password, String name, String universityName, String subject) {
-        this.loginId = loginId;
-        this.password = password;
-        this.name = name;
-        this.universityName = universityName;
+    public Teacher(String subject, String university, Login login) {
         this.subject = subject;
+        this.university = university;
+        this.login = login;
+    }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id=" + id +
+                ", subject='" + subject + '\'' +
+                ", university='" + university + '\'' +
+                ", login=" + login +
+                '}';
     }
 }

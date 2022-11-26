@@ -1,49 +1,34 @@
 package com.example.ploc.controller;
 
 import com.example.ploc.domain.Teacher;
-import com.example.ploc.dto.LoginDTO;
-import com.example.ploc.dto.TeacherDTO;
 import com.example.ploc.service.TeacherService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class TeacherController {
-
     private final TeacherService teacherService;
-    private HttpSession session;
 
-    @GetMapping("/teacher/signup")
-    public String signUpForm(){
-        return "teacherSignup";
-    }
-
-    @PostMapping("/teacher/signup")
-    public String signUp(@ModelAttribute TeacherDTO teacherDTO){
-        Teacher teacher = new Teacher(teacherDTO.getLoginId(), teacherDTO.getPassword(), teacherDTO.getName(), teacherDTO.getUniversityName(), teacherDTO.getSubject());
-        teacherService.create(teacher);
-        return "redirect:/";
-    }
-
-    @RequestMapping("/teachers")
+    @GetMapping("/member/teacher")
     public String teacherList(Model model){
-        List<Teacher> teachers = teacherService.allTeacher();
-        model.addAttribute("teacherList", teachers);
-        return "teachers";
+        List<Teacher> teachers = teacherService.findAllWithName();
+        model.addAttribute("teachers",teachers);
+        return "teacherList";
     }
 
-    @GetMapping("/teacher")
-    public String findById(@RequestParam Long id, Model model){
-        model.addAttribute("teacher",teacherService.findById(id).get());
+    @GetMapping("/member/teacher/{id}")
+    public String teacher(@PathVariable Long id,
+                          Model model){
+        Teacher teacher = teacherService.findWithId(id);
+        model.addAttribute("teacher", teacher);
         return "teacher";
     }
-
 }

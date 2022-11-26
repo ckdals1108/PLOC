@@ -14,21 +14,22 @@
         <td>일급</td>
         <td>주횟수</td>
     </tr>
-    <tr th:each="match : ${matchList}">
+    <tr th:each="match : ${matches}">
         <td th:text="${match.id}"></td>
         <td th:text="${match.name}"></td>
-        <td th:text="${match.universityName}"></td>
+        <td th:text="${match.university}"></td>
         <td th:text="${match.subject}"></td>
-        <td th:text="${match.wageOfWeek}"></td>
-        <td th:text="${match.dayOfWeek}"></td>
+        <td th:text="${match.wageOfDay}"></td>
+        <td th:text="${match.timesOfWeek}"></td>
     </tr>
 </table>
 <button th:onclick="|location.href='@{/}'|">홈으로</button>
+<button th:onclick="|location.href='@{/matching}'|">전체보기</button>
 <div>
     <form th:action method="post">
         <select name="type" value="선택">
             <option value="subject">과목</option>
-            <option value="universityName">대학</option>
+            <option value="university">대학</option>
         </select>
         <input type="text" name="search" placeholder="검색어를 입력하세요">
         <button type="submit">검색</button>

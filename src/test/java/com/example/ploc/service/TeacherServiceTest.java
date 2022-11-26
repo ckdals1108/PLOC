@@ -1,6 +1,7 @@
 package com.example.ploc.service;
 
-import com.example.ploc.domain.Student;
+import com.example.ploc.domain.Identity;
+import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,9 +24,28 @@ class TeacherServiceTest {
     EntityManager em;
 
     @Autowired
-    TeacherService teacherService;
+    private TeacherService teacherService;
+    @Autowired
+    private LoginService loginService;
+
 
     @Test
+    @Rollback(false)
+    public void findbyLogin() throws Exception{
+        //given
+        Login login = new Login("qwer","qwer","qwer", Identity.TEACHER);
+        Teacher teacher = new Teacher("min", "1234",login);
+        teacherService.create(teacher);
+
+        //when
+        //Login result = teacherService.findLogin(1L);
+
+        //then
+        //log.debug("teacher={}",result.toString());
+
+    }
+
+    /*@Test
     @Rollback(false)
     public void 학생회원생성() throws Exception{
         Teacher teacher = new Teacher("min", "1234", "chang","suwon","java");
@@ -47,4 +65,5 @@ class TeacherServiceTest {
         assertThat(teacher).isEqualTo(teacher1);
         log.debug("teacher={}",teacher.getName());
     }
+ */
 }

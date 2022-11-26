@@ -14,49 +14,26 @@ public class Match {
     @Column(name="matching_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="student_id")
-    private Student student;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="login_id")
+    private Login login;
+    
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="teacher_id")
     private Teacher teacher;
 
-    //주급
-    private int wageOfWeek;
     //주 몇일
-    private int dayOfWeek;
+    private int timesOfWeek;
+    //주급
+    private int wageOfDay;
+
 
     protected Match(){}
 
-    public Match(Student student, Teacher teacher, int wageOfWeek, int dayOfWeek) {
-        this.student = student;
+    public Match(Login login, Teacher teacher, int wageOfDay, int timesOfWeek) {
+        this.login = login;
         this.teacher = teacher;
-        this.wageOfWeek = wageOfWeek;
-        this.dayOfWeek = dayOfWeek;
-    }
-
-    @Override
-    public String toString() {
-        return "Match{" +
-                "id=" + id +
-                ", student=" + student +
-                ", teacher=" + teacher +
-                ", wageOfWeek=" + wageOfWeek +
-                ", dayOfWeek=" + dayOfWeek +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Match match = (Match) o;
-        return wageOfWeek == match.wageOfWeek && dayOfWeek == match.dayOfWeek && Objects.equals(id, match.id) && Objects.equals(student, match.student) && Objects.equals(teacher, match.teacher);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, student, teacher, wageOfWeek, dayOfWeek);
+        this.wageOfDay = wageOfDay;
+        this.timesOfWeek = timesOfWeek;
     }
 }

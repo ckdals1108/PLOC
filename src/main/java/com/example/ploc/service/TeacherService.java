@@ -1,66 +1,42 @@
 package com.example.ploc.service;
 
+import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
-import com.example.ploc.dto.LoginDTO;
-import com.example.ploc.repository.StudentRepository;
+import com.example.ploc.dto.MatchTableBoardDTO;
+import com.example.ploc.repository.LoginRepository;
 import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
+@Repository
 @Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class TeacherService {
     private final TeacherRepository teacherRepository;
-    private final StudentRepository studentRepository;
+    private final LoginRepository loginRepository;
 
-    public List<Teacher> findBySubject(Teacher teacher){
-        return teacherRepository.findBySubject(teacher.getSubject());
+    public Teacher create(Teacher teacher){
+        return teacherRepository.save(teacher);
     }
 
-    public Optional<Teacher> findById(Long id){
-        return teacherRepository.findById(id);
+    public Teacher findWithId(Long id){
+        return teacherRepository.findWithId(id);
     }
 
+    public Teacher findById(Long id){return teacherRepository.findById(id);}
 
-    public List<Teacher> allTeacher(){
-        return teacherRepository.findByAll();
+    public List<Teacher> findAllWithName(){
+        return teacherRepository.findAllWithName();
     }
 
-    public Teacher join(LoginDTO teacher){
-        Optional<Teacher> chkTeacher = teacherRepository.findByLoginId(teacher.getLoginId());
-        if(chkTeacher.isPresent()){
-            String originalPassword = chkTeacher.get().getPassword();
-            if(teacher.getPassword().equals(originalPassword))
-            {
-                return chkTeacher.get();
-            }
-            else{
-                log.info("비밀번호가 틀립니다.");
-                return null;
-            }
-        }else {
-            log.info("해당하는 아이디가 없습니다.");
-            return null;
-        }
+    public MatchTableBoardDTO findLogin(Long id){
+        Teacher teacher = teacherRepository.findById(id);
+        String name = teacher.getLogin().getName();
+        return new MatchTableBoardDTO(name, teacher);
     }
-
-    public void create(Teacher teacher){
-        try{
-            duplicateTeacher(teacher);
-            teacherRepository.save(teacher);
-        }catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void duplicateTeacher(Teacher teacher){
-        teacherRepository.findByLoginId(teacher.getLoginId())
-                .ifPresent(s -> {throw new IllegalStateException("중복된 회원이 있습니다.");});
-    }
-
 }

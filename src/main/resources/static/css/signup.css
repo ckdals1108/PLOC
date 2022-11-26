@@ -1,0 +1,3 @@
+#TEACHER:checked ~ .menubars { display: block; }
+#STUDENT:checked ~ .menubars { display: none; }
+.menubars { display: none; }

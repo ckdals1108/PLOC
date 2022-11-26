@@ -1,22 +1,18 @@
 package com.example.ploc.dto;
 
 import lombok.Getter;
-
-import javax.persistence.Column;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class TeacherDTO {
-    private String loginId;
-    private String password;
-    private String name;
-    private String universityName;
+    private LoginDTO loginDTO;
+    private String university;
     private String subject;
 
-    public TeacherDTO(String loginId, String password, String name, String universityName, String subject) {
-        this.loginId = loginId;
-        this.password = password;
-        this.name = name;
-        this.universityName = universityName;
+    public TeacherDTO(LoginDTO loginDTO, String university, String subject) {
+        this.loginDTO = loginDTO;
+        this.university = university;
         this.subject = subject;
     }
 }
