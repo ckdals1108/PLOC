@@ -6,20 +6,21 @@
     <link th:href="@{/css/signup.css}" rel="stylesheet" />
 </head>
 <body>
-<form action="/login/signup" method="post"/>
-    <p><label>ID</label><input type="text" id="userId" name="userId"/></p>
+<form action="/login/edit" method="post"/>
+    <p><label>ID</label><input type="text" id="userId" th:value="${user.userId}?:_" name="userId"/></p>
     <p><label>password</label><input type="password" id="password" name="password"/></p>
-    <p><label>이름</label><input type="text" id="name" name="name"/></p>
-    <input type="radio" id="STUDENT" name="identity" value="STUDENT" checked>
+    <p><label>이름</label><input type="text" id="name" th:value="${user.name}?:_" name="name"/></p>
+    <input type="radio" id="STUDENT" name="identity" value="STUDENT" th:checked="${user.identity.equals(T(com.example.ploc.domain.Identity).STUDENT)}?:_">
     <label for="STUDENT">학생</label>
-    <input type="radio" id="TEACHER" name="identity" value="TEACHER" >
+    <input type="radio" id="TEACHER" name="identity" value="TEACHER" th:checked="${user.identity.equals(T(com.example.ploc.domain.Identity).TEACHER)}?:_">
     <label for="TEACHER">대학생</label>
     <div class="menubars">
-        <p><label>대학교</label><input type="text" name="university"/></p>
-        <p><label>과목</label><input type="text" name="subject"/></p>
+        <p><label>대학교</label><input type="text" th:value="${user.university}?:_" name="university"/></p>
+        <p><label>과목</label><input type="text" th:value="${user.subject}?:_" name="subject"/></p>
     </div>
     <div>
-        <button type="submit">회원가입</button>
+        <button type="submit">수정하기</button>
+        <button th:onclick="|location.href='@{/}'|">홈으로</button>
     </div>
 </form>
 </body>

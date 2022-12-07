@@ -16,6 +16,12 @@ public class LoginFormDTO {
     private String subject;
     private String university;
 
+
+
+    protected LoginFormDTO(){
+
+    }
+
     public LoginFormDTO(String userId, String password, String name, Identity identity) {
         this.userId = userId;
         this.password = password;
@@ -23,8 +29,22 @@ public class LoginFormDTO {
         this.identity = identity;
     }
 
-    protected LoginFormDTO(){
+    public LoginFormDTO(Login login)
+    {
+        this.userId = login.getUserId();
+        this.password = login.getPassword();
+        this.name = login.getName();
+        this.identity = login.getIdentity();
+    }
 
+    public LoginFormDTO(Login login, Teacher teacher)
+    {
+        this.userId = login.getUserId();
+        this.password = login.getPassword();
+        this.name = login.getName();
+        this.identity = login.getIdentity();
+        this.university = teacher.getUniversity();
+        this.subject = teacher.getSubject();
     }
 
     public LoginFormDTO(String userId, String password, String name, Identity identity, String subject, String university) {

@@ -11,6 +11,7 @@ import com.example.ploc.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +48,7 @@ public class LoginController {
     }
 
     @PostMapping("/login/signup")
-    public String login(@ModelAttribute LoginFormDTO loginFormDTO){
+    public String signUp(@ModelAttribute LoginFormDTO loginFormDTO){
         if(loginFormDTO.getIdentity().equals(Identity.STUDENT)) {
             Login login = loginService.create(loginFormDTO.getLogin(loginFormDTO));
         }
@@ -60,6 +61,35 @@ public class LoginController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){
         request.getSession().invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/withdrawal")
+    public String withdrawal(HttpServletRequest request){
+        session = request.getSession(false);
+        Long loginId = (Long)session.getAttribute("loginId");
+        loginService.withdrawal(loginId);
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/login/edit")
+    public String editForm(HttpServletRequest request,
+                         Model model)
+    {
+        Long loginId = (Long)request.getSession(false).getAttribute("loginId");
+        LoginFormDTO user = loginService.loginDetail(loginId);
+        model.addAttribute("user",user);
+        model.addAttribute("id",loginId);
+        return "signup";
+    }
+
+    @PostMapping("/login/edit")
+    public String edit(@ModelAttribute LoginFormDTO loginFormDTO,
+                       HttpSession session,
+                       Model model){
+        Long loginId = (Long)session.getAttribute("loginId");
+        loginService.loginEdit(loginId, loginFormDTO);
         return "redirect:/";
     }
 }

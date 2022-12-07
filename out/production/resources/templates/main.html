@@ -9,11 +9,15 @@
         <li th:if="${!isSession}"><a href="/login">로그인</a></li>
         <li th:unless="${!isSession}"><a href="/logout">로그아웃</a></li>
         <br/>
-        <li><a href="/login/signup">회원가입</a></li>
+        <li><a href="signup.html">회원가입</a></li>
         <br/>
         <li th:if="${isSession}"><a href="/member/teacher">대학생 찾기</a> </li>
         <br/>
         <li th:if="${isSession}"><a href="/matching">나의 매칭 보기</a> </li>
+        <br/>
+        <li th:if="${isSession}"><a href="/login/edit">나의 정보 보기</a></li>
+        <br/>
+        <li th:if="${isSession}"><a href="/withdrawal">회원탈퇴</a></li>
     </ul>
 </body>
 </html>

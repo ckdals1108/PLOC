@@ -19,6 +19,7 @@
             <td th:text="${teacher.university}"></td>
             <td th:text="${teacher.subject}"></td>
             <td><button th:onclick="|location.href='@{/member/teacher/{teacherId}(teacherId=${teacher.id})}'|">상세보기</button></td>
+            <button th:onclick="|location.href='@{/}'|">홈으로</button>
         </tr>
     </table>
 

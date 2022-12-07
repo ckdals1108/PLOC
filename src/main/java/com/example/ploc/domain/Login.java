@@ -1,6 +1,8 @@
 package com.example.ploc.domain;
 
+import com.example.ploc.dto.LoginFormDTO;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,10 +19,10 @@ public class Login {
     private String password;
     private String name;
 
-    @OneToMany(mappedBy="login",cascade= CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="login", cascade= CascadeType.REMOVE, orphanRemoval = true)
     private List<Match> match;
 
-    @OneToOne(mappedBy="login", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @OneToOne(mappedBy="login", fetch = FetchType.LAZY, orphanRemoval = true)
     private Teacher teacher;
 
     @Enumerated(EnumType.STRING)
@@ -36,6 +38,26 @@ public class Login {
         this.name = name;
         this.identity = identity;
     }
+
+    public void removeTeacher(){
+        teacher = null;
+    }
+
+    public void edit(LoginFormDTO login){
+        this.userId = login.getUserId();
+        this.password = login.getPassword();
+        this.name = login.getName();
+        this.identity = login.getIdentity();
+    }
+
+    public void edit(Login login, Teacher teacher){
+        this.userId = login.getUserId();
+        this.password = login.getPassword();
+        this.name = login.getName();
+        this.identity = login.getIdentity();
+        this.teacher = teacher;
+    }
+
 
     @Override
     public String toString() {

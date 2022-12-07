@@ -38,8 +38,21 @@ public class TeacherRepository {
         return (Teacher)teacher;
     }
 
+    public Teacher findWithLoginId(Long id){
+        Object teacher = em.createQuery("select t from Teacher t join fetch t.login l" +
+                " where l.id=:id")
+                .setParameter("id", id)
+                .getSingleResult();
+        return (Teacher)teacher;
+    }
+
     public List<Teacher> findAllWithName(){
         return em.createQuery("select t from Teacher t join fetch t.login")
                 .getResultList();
+    }
+
+    public void remove(Long id){
+        Teacher teacher = findWithId(id);
+        em.remove(teacher);
     }
 }

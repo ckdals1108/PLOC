@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -35,6 +36,17 @@ public class MatchRepository {
                 " order by m.id asc").setParameter("id", id).getResultList();
     }
 
+    public List<Match> findLoginTeacher(Long id){
+        List match = em.createQuery("select m from Match m where m.login.id = :id")
+                .setParameter("id", id)
+                .getResultList();
+        List match1 = em.createQuery("select m from Match m where m.teacher.id = :id")
+                .setParameter("id", id)
+                .getResultList();
+        match.addAll(match1);
+        return match;
+    }
+
     public List<MatchTableBoardListDTO> findALlWithNameType(Long id, String type, String search) {
         if(type.equals("university"))
             return em.createQuery("select new com.example.ploc.dto.MatchTableBoardListDTO(m.id, l.name, t.university, t.subject, m.timesOfWeek, m.wageOfDay) from Match m join m.teacher t join m.login l where m.login.id = :id and t.university=:search" +
@@ -48,6 +60,10 @@ public class MatchRepository {
                     .setParameter("id", id)
                     .setParameter("search", search)
                     .getResultList();
+    }
+
+    public void remove(Match mach){
+        em.remove(mach);
     }
 
 }

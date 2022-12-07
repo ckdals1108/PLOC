@@ -45,14 +45,13 @@ class TeacherServiceTest {
 
     }
 
-    /*@Test
+    @Test
     @Rollback(false)
-    public void 학생회원생성() throws Exception{
-        Teacher teacher = new Teacher("min", "1234", "chang","suwon","java");
-        teacherService.create(teacher);
+    public void 회원삭제() throws Exception{
+        teacherService.remove(1L);
     }
 
-    @Test
+    /*@Test
     public void findById() throws Exception{
         //given
         Teacher teacher = new Teacher("min", "1234", "chang","suwon","java");

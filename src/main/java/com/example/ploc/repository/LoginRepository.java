@@ -1,16 +1,13 @@
 package com.example.ploc.repository;
 
-import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Repository
-@Transactional
 @RequiredArgsConstructor
 public class LoginRepository {
     @PersistenceContext
@@ -46,5 +43,10 @@ public class LoginRepository {
                 .setParameter("teacherId", id)
                 .getSingleResult();
         return (Login)login;
+    }
+
+    public void remove(Long id){
+        Login login = em.find(Login.class, id);
+        em.remove(login);
     }
 }

@@ -3,6 +3,7 @@ package com.example.ploc.service;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.MatchTableBoardDTO;
+import com.example.ploc.dto.TeacherDTO;
 import com.example.ploc.repository.LoginRepository;
 import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,16 @@ public class TeacherService {
         return teacherRepository.save(teacher);
     }
 
+    public Teacher findById(Long id){return teacherRepository.findById(id);}
+
     public Teacher findWithId(Long id){
         return teacherRepository.findWithId(id);
     }
 
-    public Teacher findById(Long id){return teacherRepository.findById(id);}
+    public TeacherDTO findTeacherWithLogin(Long id){
+        Teacher teacher = teacherRepository.findWithId(id);
+        return new TeacherDTO(teacher);
+    }
 
     public List<Teacher> findAllWithName(){
         return teacherRepository.findAllWithName();
@@ -38,5 +44,9 @@ public class TeacherService {
         Teacher teacher = teacherRepository.findById(id);
         String name = teacher.getLogin().getName();
         return new MatchTableBoardDTO(name, teacher);
+    }
+
+    public void remove(Long id){
+        teacherRepository.remove(id);
     }
 }

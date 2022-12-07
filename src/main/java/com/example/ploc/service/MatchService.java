@@ -1,7 +1,6 @@
 package com.example.ploc.service;
 
 import com.example.ploc.domain.Match;
-import com.example.ploc.dto.MatchTableBoardDTO;
 import com.example.ploc.dto.MatchTableBoardListDTO;
 import com.example.ploc.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ public class MatchService {
     public List<MatchTableBoardListDTO> matchList(Long id){
         return matchRepository.findALlWithName(id);
     }
+
 
     public List<MatchTableBoardListDTO> matchListWithType(Long id, String type, String search){
         return matchRepository.findALlWithNameType(id, type, search);

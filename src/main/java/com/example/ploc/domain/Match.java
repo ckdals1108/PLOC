@@ -3,7 +3,6 @@ package com.example.ploc.domain;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -35,5 +34,10 @@ public class Match {
         this.teacher = teacher;
         this.wageOfDay = wageOfDay;
         this.timesOfWeek = timesOfWeek;
+    }
+
+    public void removeLoginTeacher(){
+        teacher = null;
+        login = null;
     }
 }

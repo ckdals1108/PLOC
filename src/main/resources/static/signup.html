@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POLC 대학생과외</title>
+    <link href="/css/signup.css" rel="stylesheet" />
+</head>
+<body>
+<form action="/login/signup" method="post"/>
+<p><label>ID</label><input type="text" id="userId" name="userId"/></p>
+<p><label>password</label><input type="password" id="password"  name="password"/></p>
+<p><label>이름</label><input type="text" id="name" name="name"/></p>
+<input type="radio" id="STUDENT" name="identity" value="STUDENT" checked>
+<label for="STUDENT">학생</label>
+<input type="radio" id="TEACHER" name="identity" value="TEACHER">
+<label for="TEACHER">대학생</label>
+<div class="menubars" >
+    <p><label>대학교</label><input type="text" name="university"/></p>
+    <p><label>과목</label><input type="text" name="subject"/></p>
+</div>
+<div>
+    <button type="submit">회원가입</button>
+</div>
+</form>
+</body>
+</html>
