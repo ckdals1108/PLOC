@@ -3,6 +3,7 @@ package com.example.ploc.domain;
 import lombok.Getter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -22,8 +23,10 @@ public class Match {
     private Teacher teacher;
 
     //주 몇일
+    @NotBlank
     private int timesOfWeek;
     //주급
+    @NotBlank
     private int wageOfDay;
 
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
@@ -15,8 +16,13 @@ public class Login {
     @Column(name="login_id")
     private Long id;
 
+    @NotBlank
     private String userId;
+
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String name;
 
     @OneToMany(mappedBy="login", cascade= CascadeType.REMOVE, orphanRemoval = true)
@@ -28,7 +34,7 @@ public class Login {
     @Enumerated(EnumType.STRING)
     private Identity identity;
 
-    protected Login(){
+    public Login(){
 
     }
 

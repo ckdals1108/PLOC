@@ -61,7 +61,7 @@ public class LoginService {
         login.edit(loginFormDTO);
         if(loginFormDTO.getIdentity().equals(Identity.TEACHER))
         {
-            Teacher teacher = teacherRepository.findWithId(id);
+            Teacher teacher = teacherRepository.findWithLoginId(id);
             teacher.edit(loginFormDTO);
         }
     }

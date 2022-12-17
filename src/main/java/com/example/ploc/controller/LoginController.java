@@ -8,16 +8,22 @@ import com.example.ploc.dto.LoginFormDTO;
 import com.example.ploc.repository.LoginRepository;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
+import com.example.ploc.service.web.validator.LoginValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,8 +31,13 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     private final LoginService loginService;
     private final TeacherService teacherService;
+    private final LoginValidator loginValidator;
     HttpSession session;
-    Long id;
+
+    @ModelAttribute("identityTypes")
+    public Identity[] identityTypes() {
+        return Identity.values();
+    }
 
     @GetMapping("/login")
     public String loginForm(){
@@ -43,12 +54,30 @@ public class LoginController {
     }
 
     @GetMapping("/login/signup")
-    public String signUpForm(){
+    public String signUpForm(Model model){
+        model.addAttribute("login",new LoginFormDTO());
         return "signup";
     }
 
     @PostMapping("/login/signup")
-    public String signUp(@ModelAttribute LoginFormDTO loginFormDTO){
+    public String signUp(@Valid @ModelAttribute("login") LoginFormDTO loginFormDTO,
+                         BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if(loginFormDTO.getIdentity() == null){
+            bindingResult.rejectValue("identity", "required");
+        }
+
+        if(loginFormDTO.getIdentity() == null || loginFormDTO.getIdentity().equals(Identity.TEACHER))
+        {
+            if(!StringUtils.hasText(loginFormDTO.getUniversity()) || !StringUtils.hasText(loginFormDTO.getSubject()))
+            {
+                loginValidator.validate(loginFormDTO, bindingResult);
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        }
+
         if(loginFormDTO.getIdentity().equals(Identity.STUDENT)) {
             Login login = loginService.create(loginFormDTO.getLogin(loginFormDTO));
         }

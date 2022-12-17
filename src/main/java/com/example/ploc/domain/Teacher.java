@@ -4,6 +4,7 @@ import com.example.ploc.dto.LoginFormDTO;
 import lombok.Getter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,9 @@ public class Teacher {
     @Column(name="teacher_id")
     private Long id;
 
+    @NotBlank
     private String subject;
+    @NotBlank
     private String university;
 
     @OneToMany(mappedBy="login", orphanRemoval = true)

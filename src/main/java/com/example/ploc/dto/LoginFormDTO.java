@@ -6,11 +6,16 @@ import com.example.ploc.domain.Teacher;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 public class LoginFormDTO {
+    @NotBlank
     private String userId;
+    @NotBlank
     private String password;
+    @NotBlank
     private String name;
     private Identity identity;
     private String subject;
@@ -18,7 +23,7 @@ public class LoginFormDTO {
 
 
 
-    protected LoginFormDTO(){
+    public LoginFormDTO(){
 
     }
 
@@ -63,5 +68,17 @@ public class LoginFormDTO {
     public Teacher getTeacher(LoginFormDTO loginFormDTO){
         Login login = new Login(userId, password, name, identity);
         return new Teacher(subject, university, login);
+    }
+
+    @Override
+    public String toString() {
+        return "LoginFormDTO{" +
+                "userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", identity=" + identity +
+                ", subject='" + subject + '\'' +
+                ", university='" + university + '\'' +
+                '}';
     }
 }

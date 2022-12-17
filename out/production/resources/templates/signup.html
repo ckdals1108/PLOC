@@ -1,26 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>POLC 대학생과외</title>
-    <link th:href="@{/css/signup.css}" rel="stylesheet" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link href="/css/signup.css" rel="stylesheet" />
+    <script th:inline="javascript">
+        $(document).ready(function() {
+                if($("input[name=identity]:checked").val() == "TEACHER"){
+                    $('.teacherDiv').css('display','block');
+                }else if($("input[name=identity]:checked").val() == "STUDENT"){
+                    $('.teacherDiv').css('display','none');
+                }
+
+            $("input:radio").click(function() {
+                if($("input[name=identity]:checked").val() == "TEACHER"){
+                    $('.teacherDiv').css('display','block');
+                }else if($("input[name=identity]:checked").val() == "STUDENT"){
+                    $('.teacherDiv').css('display','none');
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-<form action="/login/edit" method="post"/>
-    <p><label>ID</label><input type="text" id="userId" th:value="${user.userId}?:_" name="userId"/></p>
-    <p><label>password</label><input type="password" id="password" name="password"/></p>
-    <p><label>이름</label><input type="text" id="name" th:value="${user.name}?:_" name="name"/></p>
-    <input type="radio" id="STUDENT" name="identity" value="STUDENT" th:checked="${user.identity.equals(T(com.example.ploc.domain.Identity).STUDENT)}?:_">
-    <label for="STUDENT">학생</label>
-    <input type="radio" id="TEACHER" name="identity" value="TEACHER" th:checked="${user.identity.equals(T(com.example.ploc.domain.Identity).TEACHER)}?:_">
-    <label for="TEACHER">대학생</label>
-    <div class="menubars">
-        <p><label>대학교</label><input type="text" th:value="${user.university}?:_" name="university"/></p>
-        <p><label>과목</label><input type="text" th:value="${user.subject}?:_" name="subject"/></p>
+<form action="/login/signup" th:object="${login}" method="post">
+    <p><label>ID</label><input type="text" th:field="*{userId}"/></p>
+    <p class="field-error" th:errors="*{userId}">아이디 오류</p>
+    <p><label>password</label><input type="password" th:field="*{password}"/></p>
+    <p class="field-error" th:errors="*{password}">패스워드 오류</p>
+    <p><label>이름</label><input type="text" th:field="*{name}"/></p>
+    <p class="field-error" th:errors="*{name}">이름 오류</p>
+
+    <div th:each="type : ${identityTypes}" class="teacherBox">
+        <input type="radio" th:field="${login.identity}" th:value="${type.name()}"
+               th:classappend="${#strings.equals(type.description, '대학생') ? 'teacher':'student'}"/>
+        <label th:for="${#ids.prev('identity')}" th:text="${type.description}">신원</label>
     </div>
+    <br/>
+    <div class="teacherDiv">
+        <p><label>대학교</label><input type="text" th:field="${login.university}"/></p>
+        <p class="field-error" th:errors="${login.university}">대학 오류</p>
+        <p><label>과목</label><input type="text" th:field="${login.subject}"/></p>
+        <p class="field-error" th:errors="${login.subject}">과목 오류</p>
+    </div>
+
+    <p class="field-error" th:errors="*{identity}">신원 오류</p>
     <div>
-        <button type="submit">수정하기</button>
-        <button th:onclick="|location.href='@{/}'|">홈으로</button>
+        <button type="submit">회원가입</button>
+        <button >홈으로</button>
     </div>
 </form>
 </body>

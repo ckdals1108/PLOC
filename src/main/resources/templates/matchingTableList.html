@@ -7,12 +7,12 @@
 <body>
 <table border="1">
     <tr>
-        <td>번호</td>
-        <td>이름</td>
-        <td>학교</td>
-        <td>과목</td>
-        <td>일급</td>
-        <td>주횟수</td>
+        <td >번호</td>
+        <td th:text="#{label.name}">이름</td>
+        <td th:text="#{label.university}">학교</td>
+        <td th:text="#{label.subject}">과목</td>
+        <td th:text="#{label.wageOfDay}">일급</td>
+        <td th:text="#{label.timesOfWeek}">주횟수</td>
     </tr>
     <tr th:each="match : ${matches}">
         <td th:text="${match.id}"></td>
@@ -23,17 +23,16 @@
         <td th:text="${match.timesOfWeek}"></td>
     </tr>
 </table>
-<button th:onclick="|location.href='@{/}'|">홈으로</button>
 <button th:onclick="|location.href='@{/matching}'|">전체보기</button>
 <div>
     <form th:action method="post">
         <select name="type" value="선택">
-            <option value="subject">과목</option>
-            <option value="university">대학</option>
+            <option th:text="#{label.subject}" value="subject">과목</option>
+            <option th:text="#{label.university}" value="university">대학</option>
         </select>
         <input type="text" name="search" placeholder="검색어를 입력하세요">
-        <button type="submit">검색</button>
-        <button th:onclick="|location.href='@{/}'|">홈으로</button>
+        <button th:text="#{label.search}" type="submit">검색</button>
+        <button th:text="#{label.home}" th:onclick="|location.href='@{/}'|">홈으로</button>
     </form>
 </div>
 </body>
