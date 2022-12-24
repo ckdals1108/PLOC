@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>매칭</title>
+    <link href="/css/signup.css" rel="stylesheet" />
 </head>
 <body>
-<form th:action method="post">
-    <label>이름 : </label><input type="text" name="name" th:value="${teacher.login.name}" readonly/><br>
-    <label>학교 : </label><input type="text" name="university" th:value="${teacher.university}" readonly/><br>
-    <label>과목 : </label><input type="text" name="subject" th:value="${teacher.subject}" readonly/><br>
-    <label>일급 : </label><input type="text" name="wageOfDay" /><br>
-    <label>주횟수 : </label><input type="text" name="timesOfWeek" />
+<form th:action th:object="${teacher}" method="post">
+    <label>이름 : </label><input type="text" th:field="*{name}" th:value="${teacher.name}" readonly/><br>
+    <label>학교 : </label><input type="text" th:field="*{university}" th:value="${teacher.university}" readonly/><br>
+    <label>과목 : </label><input type="text" th:field="*{subject}" th:value="${teacher.subject}" readonly/><br>
+    <label>일급 : </label><input type="text" th:field="*{wageOfDay}"/><br/>
+    <p class="field-error" th:errors="*{wageOfDay}">일급 오류</p>
+    <label>주횟수 : </label><input type="text" th:field="*{timesOfWeek}" /><br>
+    <p class="field-error" th:errors="*{timesOfWeek}">주횟수 오류</p>
     <button type="submit">매칭하기</button>
-    <button th:onclick="|location.href='@{/}'|">홈으로</button>
 </form>
+<button th:onclick="|location.href='@{/}'|">홈으로</button>
 </body>
 </html>

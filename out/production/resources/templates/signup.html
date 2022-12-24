@@ -44,12 +44,11 @@
         <p><label>과목</label><input type="text" th:field="${login.subject}"/></p>
         <p class="field-error" th:errors="${login.subject}">과목 오류</p>
     </div>
-
     <p class="field-error" th:errors="*{identity}">신원 오류</p>
     <div>
-        <button type="submit">회원가입</button>
-        <button >홈으로</button>
+        <button type="submit" th:text="${id}?수정하기:회원가입">회원가입</button>
     </div>
 </form>
+<button th:onclick="|location.href='@{/}'|">홈으로</button>
 </body>
 </html>

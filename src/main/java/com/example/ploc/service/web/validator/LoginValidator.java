@@ -1,6 +1,5 @@
 package com.example.ploc.service.web.validator;
 
-import com.example.ploc.domain.Login;
 import com.example.ploc.dto.LoginFormDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -18,7 +17,6 @@ public class LoginValidator implements Validator {
     public void validate(Object target, Errors errors) {
         LoginFormDTO login = (LoginFormDTO) target;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "identity", "required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "university", "required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subject", "required");
     }

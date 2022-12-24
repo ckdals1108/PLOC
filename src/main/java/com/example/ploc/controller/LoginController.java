@@ -5,7 +5,6 @@ import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.LoginDTO;
 import com.example.ploc.dto.LoginFormDTO;
-import com.example.ploc.repository.LoginRepository;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
 import com.example.ploc.service.web.validator.LoginValidator;
@@ -15,10 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,17 +44,19 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginDTO loginDTO,
+    public String login(@RequestParam(defaultValue="/") String redirectURL,
+                        @ModelAttribute LoginDTO loginDTO,
                         HttpServletRequest request){
         Login login = loginService.join(loginDTO);
         session = request.getSession();
         session.setAttribute("loginId", login.getId());
-        return "redirect:/";
+        return "redirect:" + redirectURL;
     }
 
     @GetMapping("/login/signup")
     public String signUpForm(Model model){
         model.addAttribute("login",new LoginFormDTO());
+        model.addAttribute("id",null);
         return "signup";
     }
 
@@ -104,11 +105,11 @@ public class LoginController {
 
     @GetMapping("/login/edit")
     public String editForm(HttpServletRequest request,
-                         Model model)
+                           Model model)
     {
         Long loginId = (Long)request.getSession(false).getAttribute("loginId");
         LoginFormDTO user = loginService.loginDetail(loginId);
-        model.addAttribute("user",user);
+        model.addAttribute("login",user);
         model.addAttribute("id",loginId);
         return "signup";
     }
