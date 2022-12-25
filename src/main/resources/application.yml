@@ -1,6 +1,9 @@
 #처음 이용할시 jsessionid가 붙지 않도록 설정
 
 server:
+  error:
+    whitelabel:
+      enabled: false
   servlet:
     session:
       tracking-modes: cookie
