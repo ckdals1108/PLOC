@@ -1,6 +1,5 @@
 package com.example.ploc.dto;
 
-import com.example.ploc.domain.Identity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +8,10 @@ import lombok.Setter;
 public class LoginDTO {
     private String userId;
     private String password;
+
+    protected LoginDTO(){
+
+    }
 
     public LoginDTO(String userId, String password) {
         this.userId = userId;

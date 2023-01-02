@@ -82,7 +82,7 @@ class TeacherRepositoryTest {
         teacherRepository.save(teacher1);
 
         //when
-        Teacher teacher = teacherRepository.findById(teacher1.getId());
+        Teacher teacher = teacherRepository.findWithLoginId(teacher1.getId());
 
         //then
         log.debug("teacher={}", teacher.toString());

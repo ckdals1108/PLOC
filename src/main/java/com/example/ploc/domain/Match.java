@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -23,10 +24,10 @@ public class Match {
     private Teacher teacher;
 
     //주 몇일
-    @NotBlank
+    @NotNull
     private int timesOfWeek;
     //주급
-    @NotBlank
+    @NotNull
     private int wageOfDay;
 
 

@@ -2,11 +2,15 @@ package com.example.ploc.repository;
 
 import com.example.ploc.domain.Login;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class LoginRepository {
@@ -23,17 +27,17 @@ public class LoginRepository {
         return login;
     }
 
-    public Login findByUserId(String userId){
-        Object login = em.createQuery("select l from Login l where l.userId = :userId")
+    public List findByUserId(String userId){
+        List login = em.createQuery("select l from Login l where l.userId = :userId")
                 .setParameter("userId", userId)
-                .getSingleResult();
-        return (Login)login;
+                .getResultList();
+        return login;
     }
 
     public Login findByTeacherId(Long id){
         Object login = em.createQuery("select l from Login l join Teacher t where l.teacher.id=:teacherId")
                 .setParameter("teacherId", id)
-                .getSingleResult();
+                .getResultList();
         return (Login)login;
     }
 

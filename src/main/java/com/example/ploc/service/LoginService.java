@@ -5,12 +5,15 @@ import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.LoginDTO;
 import com.example.ploc.dto.LoginFormDTO;
+import com.example.ploc.exception.UserException;
 import com.example.ploc.repository.LoginRepository;
 import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,15 +24,28 @@ public class LoginService {
     private final TeacherRepository teacherRepository;
 
     public Login create(Login login){
+        List list = loginRepository.findByUserId(login.getUserId());
+        if(!list.isEmpty()){
+            throw new UserException("중복된 회원이 있습니다.");
+        }
+
         return loginRepository.save(login);
     }
 
     public Login join(LoginDTO login){
-        Login database = loginRepository.findByUserId(login.getUserId());
-        if(database.getPassword().equals(login.getPassword()))
-            return database;
+        Login database;
+
+        List list = loginRepository.findByUserId(login.getUserId());
+
+        if(list.isEmpty())
+            throw new UserException("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
         else
-            return null;
+            database = (Login)list.get(0);
+
+        if(!database.getPassword().equals(login.getPassword()))
+            throw new UserException("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
+
+        return database;
     }
 
     public Login findById(Long id){
@@ -42,6 +58,19 @@ public class LoginService {
             loginRepository.remove(id);
         else if(login.getIdentity().equals(Identity.TEACHER))
             teacherRepository.remove(id);
+    }
+
+    public void withdrawal(LoginDTO loginDTO){
+        Login database;
+        List list = loginRepository.findByUserId(loginDTO.getUserId());
+
+        if(!list.isEmpty()) {
+            database = (Login)list.get(0);
+            if(database.getIdentity().equals(Identity.STUDENT))
+                loginRepository.remove(database.getId());
+            else if(database.getIdentity().equals(Identity.TEACHER))
+                teacherRepository.remove(database.getId());
+        }
     }
 
     public LoginFormDTO loginDetail(Long id){

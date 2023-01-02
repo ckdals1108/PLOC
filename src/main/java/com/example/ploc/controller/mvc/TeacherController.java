@@ -1,4 +1,4 @@
-package com.example.ploc.controller;
+package com.example.ploc.controller.mvc;
 
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.service.TeacherService;

@@ -62,8 +62,9 @@ public class MatchRepository {
                     .getResultList();
     }
 
-    public void remove(Match mach){
-        em.remove(mach);
+    public void remove(Long id){
+        Match match = em.find(Match.class, id);
+        em.remove(match);
     }
 
 }
