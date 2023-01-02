@@ -1,6 +1,7 @@
 package com.example.ploc.domain;
 
 import com.example.ploc.dto.LoginFormDTO;
+import com.example.ploc.dto.file.UploadFile;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -20,12 +21,16 @@ public class Teacher {
     @NotBlank
     private String university;
 
-    @OneToMany(mappedBy="login", orphanRemoval = true)
+    @OneToMany(mappedBy="teacher", orphanRemoval = true)
     private List<Match> match;
 
     @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="login_login_id")
     private Login login;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
+    @JoinColumn(name="idPhotoFile_id")
+    private IdPhotoFile idPhotoFile;
 
     protected Teacher() {
 
@@ -37,8 +42,15 @@ public class Teacher {
         this.login = login;
     }
 
-    public void setTeamToProxy(Login login){
+    public Teacher(String subject, String university, Login login, IdPhotoFile idPhotoFile) {
+        this.subject = subject;
+        this.university = university;
         this.login = login;
+        this.idPhotoFile = idPhotoFile;
+    }
+
+    public void changeIdPhotoFile(IdPhotoFile idPhotoFile){
+        this.idPhotoFile = idPhotoFile;
     }
 
     public void edit(LoginFormDTO login){

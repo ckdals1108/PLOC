@@ -7,6 +7,7 @@ import com.example.ploc.dto.LoginDTO;
 import com.example.ploc.dto.LoginFormDTO;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
+import com.example.ploc.service.file.IdPhotoFileStore;
 import com.example.ploc.service.web.validator.LoginValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,15 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -62,7 +61,7 @@ public class LoginController {
 
     @PostMapping("/login/signup")
     public String signUp(@Valid @ModelAttribute("login") LoginFormDTO loginFormDTO,
-                         BindingResult bindingResult, RedirectAttributes redirectAttributes){
+                         BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
         if(loginFormDTO.getIdentity() == null){
             bindingResult.rejectValue("identity", "required");
         }
@@ -83,7 +82,7 @@ public class LoginController {
             Login login = loginService.create(loginFormDTO.getLogin(loginFormDTO));
         }
         else {
-            Teacher login = teacherService.create(loginFormDTO.getTeacher(loginFormDTO));
+            Teacher login = teacherService.create(loginFormDTO);
         }
         return "redirect:/";
     }

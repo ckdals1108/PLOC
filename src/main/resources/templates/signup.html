@@ -24,7 +24,7 @@
     </script>
 </head>
 <body>
-<form action="/login/signup" th:object="${login}" method="post">
+<form action="/login/signup" enctype="multipart/form-data" th:object="${login}" method="post">
     <p><label>ID</label><input type="text" th:field="*{userId}"/></p>
     <p class="field-error" th:errors="*{userId}">아이디 오류</p>
     <p><label>password</label><input type="password" th:field="*{password}"/></p>
@@ -43,6 +43,7 @@
         <p class="field-error" th:errors="${login.university}">대학 오류</p>
         <p><label>과목</label><input type="text" th:field="${login.subject}"/></p>
         <p class="field-error" th:errors="${login.subject}">과목 오류</p>
+        <p><label>파일</label><input type="file" name="attachFile"></p>
     </div>
     <p class="field-error" th:errors="*{identity}">신원 오류</p>
     <div>

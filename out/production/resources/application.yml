@@ -21,10 +21,12 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate.format_sql: true
 
+file:
+  dir: C:/Users/Woo/Desktop/공부/spring/project/ploc/file/
 
 logging:
   level:
