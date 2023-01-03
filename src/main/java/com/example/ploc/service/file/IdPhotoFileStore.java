@@ -7,15 +7,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Component
 public class IdPhotoFileStore {
     @Value("${file.dir}")
     private String fileDir;
+    private String idPhoto = "/idPhoto";
 
     public String getFullPath(String fileName) {
-        return fileDir + "/idPhoto/" + fileName;
+        return fileDir + datePath() + fileName;
     }
 
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
@@ -27,6 +30,24 @@ public class IdPhotoFileStore {
         String storeFileName = createStoreFileName(originalFileName);
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
         return new UploadFile(originalFileName, storeFileName);
+    }
+
+    private String datePath() {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String path = now.format(formatter);
+        File folder = new File(fileDir + path);
+
+        if(!folder.exists())
+            folder.mkdir();
+
+
+        folder = new File(fileDir + path + idPhoto);
+
+        if(!folder.exists())
+            folder.mkdir();
+
+        return path + idPhoto + "/";
     }
 
     private String createStoreFileName(String originalFileName){

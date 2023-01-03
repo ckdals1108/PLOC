@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>POLC 대학생과외</title>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link href="/css/signup.css" rel="stylesheet" />
+    <script th:inline="javascript">
+        $(document).ready(function() {
+                if($("input[name=identity]:checked").val() == "TEACHER"){
+                    $('.teacherDiv').css('display','block');
+                }else if($("input[name=identity]:checked").val() == "STUDENT"){
+                    $('.teacherDiv').css('display','none');
+                }
+
+            $("input:radio").click(function() {
+                if($("input[name=identity]:checked").val() == "TEACHER"){
+                    $('.teacherDiv').css('display','block');
+                }else if($("input[name=identity]:checked").val() == "STUDENT"){
+                    $('.teacherDiv').css('display','none');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<form action="/login/signup" enctype="multipart/form-data" th:object="${login}" method="post">
+    <p><label>ID</label><input type="text" th:field="*{userId}"/></p>
+    <p class="field-error" th:errors="*{userId}">아이디 오류</p>
+    <p><label>password</label><input type="password" th:field="*{password}"/></p>
+    <p class="field-error" th:errors="*{password}">패스워드 오류</p>
+    <p><label>이름</label><input type="text" th:field="*{name}"/></p>
+    <p class="field-error" th:errors="*{name}">이름 오류</p>
+
+    <div th:each="type : ${identityTypes}" class="teacherBox">
+        <input type="radio" th:field="${login.identity}" th:value="${type.name()}"
+               th:classappend="${#strings.equals(type.description, '대학생') ? 'teacher':'student'}"/>
+        <label th:for="${#ids.prev('identity')}" th:text="${type.description}">신원</label>
+    </div>
+    <br/>
+    <div class="teacherDiv">
+        <p><label>대학교</label><input type="text" th:field="${login.university}"/></p>
+        <p class="field-error" th:errors="${login.university}">대학 오류</p>
+        <p><label>과목</label><input type="text" th:field="${login.subject}"/></p>
+        <p class="field-error" th:errors="${login.subject}">과목 오류</p>
+        <p><label>대학 증명서 </label><a th:if="${login.attachFile}" th:href="|/attach/${id}|" th:text="${login.attachFile.upLoadFileName}"/><br/><br/>
+        <img th:if="${login.attachFile}" th:src="|/idPhoto/${login.attachFile.getStoreFileName()}|" width="300" height="300"/>
+    </div>
+    <p class="field-error" th:errors="*{identity}">신원 오류</p>
+    <div>
+        <button type="submit" th:text="${id}?수정하기:회원가입">회원가입</button>
+    </div>
+</form>
+<button th:onclick="|lo///cation.href='@{/}'|">홈으로</button>
+</body>
+</html>

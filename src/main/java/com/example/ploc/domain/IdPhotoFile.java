@@ -18,19 +18,33 @@ public class IdPhotoFile {
 
     private String upLoadFileName;
     private String storeFileName;
+    private String filePath;
+
+    protected IdPhotoFile() {
+    }
 
     public IdPhotoFile(String upLoadFileName, String storeFileName) {
         this.upLoadFileName = upLoadFileName;
         this.storeFileName = storeFileName;
     }
 
-    public IdPhotoFile(Teacher teacher, String upLoadFileName, String storeFileName) {
-        this.teacher = teacher;
+    public IdPhotoFile(String upLoadFileName, String storeFileName, String filePath) {
         this.upLoadFileName = upLoadFileName;
         this.storeFileName = storeFileName;
+        this.filePath = filePath;
     }
 
     public void changeTeacher(Teacher teacher){
         this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        return "IdPhotoFile{" +
+                "id=" + id +
+                ", upLoadFileName='" + upLoadFileName + '\'' +
+                ", storeFileName='" + storeFileName + '\'' +
+                ", filePath='" + filePath + '\'' +
+                '}';
     }
 }

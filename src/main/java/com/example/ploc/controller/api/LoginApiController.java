@@ -4,6 +4,7 @@ import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.LoginDTO;
+import com.example.ploc.dto.LoginEditDTO;
 import com.example.ploc.dto.LoginFormDTO;
 import com.example.ploc.dto.api.LoginAPIDTO;
 import com.example.ploc.dto.api.LoginAPIFormDTO;
@@ -48,8 +49,8 @@ public class LoginApiController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<LoginFormDTO> userStatus(@PathVariable Long id){
-        LoginFormDTO loginFormDTO = loginService.loginDetail(id);
+    public ResponseEntity<LoginEditDTO> userStatus(@PathVariable Long id){
+        LoginEditDTO loginFormDTO = loginService.loginDetail(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(loginFormDTO);
     }

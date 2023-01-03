@@ -64,7 +64,9 @@ public class Teacher {
                 "id=" + id +
                 ", subject='" + subject + '\'' +
                 ", university='" + university + '\'' +
+                ", match=" + match +
                 ", login=" + login +
+                ", idPhotoFile=" + idPhotoFile +
                 '}';
     }
 }

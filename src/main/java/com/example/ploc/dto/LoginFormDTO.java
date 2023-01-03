@@ -3,7 +3,6 @@ package com.example.ploc.dto;
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
-import com.example.ploc.dto.file.UploadFile;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;

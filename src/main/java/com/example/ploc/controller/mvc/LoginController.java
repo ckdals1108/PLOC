@@ -1,9 +1,11 @@
 package com.example.ploc.controller.mvc;
 
+import com.example.ploc.domain.IdPhotoFile;
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.LoginDTO;
+import com.example.ploc.dto.LoginEditDTO;
 import com.example.ploc.dto.LoginFormDTO;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
@@ -11,17 +13,26 @@ import com.example.ploc.service.file.IdPhotoFileStore;
 import com.example.ploc.service.web.validator.LoginValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.buf.UriUtil;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +41,7 @@ public class LoginController {
     private final LoginService loginService;
     private final TeacherService teacherService;
     private final LoginValidator loginValidator;
+    private final IdPhotoFileStore idPhotoFileStore;
     HttpSession session;
 
     @ModelAttribute("identityTypes")
@@ -103,14 +115,34 @@ public class LoginController {
     }
 
     @GetMapping("/login/edit")
-    public String editForm(HttpServletRequest request,
-                           Model model)
+    public String editForm(HttpServletRequest request, Model model)
     {
         Long loginId = (Long)request.getSession(false).getAttribute("loginId");
-        LoginFormDTO user = loginService.loginDetail(loginId);
+        LoginEditDTO user = loginService.loginDetail(loginId);
         model.addAttribute("login",user);
         model.addAttribute("id",loginId);
-        return "signup";
+        return "edit";
+    }
+
+    @ResponseBody
+    @GetMapping("/idPhoto/{fileName}")
+    public Resource downloadFile(@PathVariable String fileName) throws MalformedURLException {
+        return new UrlResource("file:" + idPhotoFileStore.getFullPath(fileName));
+    }
+
+    @GetMapping("/attach/{id}")
+    public ResponseEntity<Resource> downloadAttach(@PathVariable Long id) throws MalformedURLException {
+        Teacher teacher = teacherService.findWithIdPhotoFile(id);
+        String upLoadFileName = teacher.getIdPhotoFile().getUpLoadFileName();
+        String storeFileName = teacher.getIdPhotoFile().getStoreFileName();
+
+        UrlResource resource = new UrlResource("file:" + idPhotoFileStore.getFullPath(storeFileName));
+
+        String encodeUploadFileName = UriUtils.encode(upLoadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 
     @PostMapping("/login/edit")

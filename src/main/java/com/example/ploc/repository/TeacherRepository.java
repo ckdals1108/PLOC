@@ -51,6 +51,13 @@ public class TeacherRepository {
                 .getResultList();
     }
 
+    public Teacher findWithIdPhotoFile(Long id){
+        List resultList = em.createQuery("select t from Teacher t join fetch t.idPhotoFile where t.login.id=:id")
+                .setParameter("id",id)
+                .getResultList();
+        return (Teacher)resultList.get(0);
+    }
+
     public void remove(Long id){
         Teacher teacher = findWithId(id);
         em.remove(teacher);

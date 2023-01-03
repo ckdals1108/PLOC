@@ -88,4 +88,14 @@ class TeacherRepositoryTest {
         log.debug("teacher={}", teacher.toString());
         log.debug("login_name={}", teacher.getLogin().getName());
     }
+
+    @Test
+    public void 대학생증명서패치조인() throws Exception{
+        //given
+
+        //when
+        Teacher teacher = teacherRepository.findWithIdPhotoFile(31L);
+        //then
+        log.debug("teacher = {}", teacher.getIdPhotoFile());
+    }
 }

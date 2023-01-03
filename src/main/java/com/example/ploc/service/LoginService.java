@@ -4,6 +4,7 @@ import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.LoginDTO;
+import com.example.ploc.dto.LoginEditDTO;
 import com.example.ploc.dto.LoginFormDTO;
 import com.example.ploc.exception.UserException;
 import com.example.ploc.repository.LoginRepository;
@@ -73,15 +74,15 @@ public class LoginService {
         }
     }
 
-    public LoginFormDTO loginDetail(Long id){
+    public LoginEditDTO loginDetail(Long id){
         Login login = loginRepository.findById(id);
         if(login.getIdentity().equals(Identity.STUDENT))
         {
-            return new LoginFormDTO(login);
+            return new LoginEditDTO(login);
         }
         else{
             Teacher teacher = teacherRepository.findWithLoginId(id);
-            return new LoginFormDTO(login, teacher);
+            return new LoginEditDTO(login, teacher);
         }
     }
 

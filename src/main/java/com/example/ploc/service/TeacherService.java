@@ -45,6 +45,17 @@ public class TeacherService {
         return teacherRepository.findWithId(id);
     }
 
+    public Teacher findWithLoginId(Long id){
+        Teacher teacher = teacherRepository.findWithLoginId(id);
+        IdPhotoFile idPhotoFile = teacher.getIdPhotoFile();
+        return teacher;
+    }
+
+    public Teacher findWithIdPhotoFile(Long id){
+        Teacher teacher = teacherRepository.findWithIdPhotoFile(id);
+        return teacher;
+    }
+
     public TeacherDTO findTeacherWithLogin(Long id){
         Teacher teacher = teacherRepository.findWithId(id);
         return new TeacherDTO(teacher);

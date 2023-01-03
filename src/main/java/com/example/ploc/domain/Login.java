@@ -63,16 +63,4 @@ public class Login {
         this.identity = login.getIdentity();
         this.teacher = teacher;
     }
-
-
-    @Override
-    public String toString() {
-        return "Login{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", identity=" + identity +
-                '}';
-    }
 }
