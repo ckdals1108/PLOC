@@ -1,6 +1,5 @@
 package com.example.ploc.controller.mvc;
 
-import com.example.ploc.domain.IdPhotoFile;
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
@@ -13,7 +12,6 @@ import com.example.ploc.service.file.IdPhotoFileStore;
 import com.example.ploc.service.web.validator.LoginValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.buf.UriUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -135,8 +133,9 @@ public class LoginController {
         Teacher teacher = teacherService.findWithIdPhotoFile(id);
         String upLoadFileName = teacher.getIdPhotoFile().getUpLoadFileName();
         String storeFileName = teacher.getIdPhotoFile().getStoreFileName();
+        String filePath = teacher.getIdPhotoFile().getFilePath();
 
-        UrlResource resource = new UrlResource("file:" + idPhotoFileStore.getFullPath(storeFileName));
+        UrlResource resource = new UrlResource("file:" + filePath + storeFileName);
 
         String encodeUploadFileName = UriUtils.encode(upLoadFileName, StandardCharsets.UTF_8);
         String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";

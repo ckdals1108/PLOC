@@ -34,7 +34,7 @@ public class TeacherService {
     public Teacher create(LoginFormDTO user) throws IOException {
         Login login = new Login(user.getUserId(), user.getPassword(), user.getName(), user.getIdentity());
         UploadFile uploadFile = idPhotoFileStore.storeFile(user.getAttachFile());
-        IdPhotoFile idPhotoFile = new IdPhotoFile(uploadFile.getUpLoadFileName(), uploadFile.getStoreFileName());
+        IdPhotoFile idPhotoFile = new IdPhotoFile(uploadFile.getUpLoadFileName(), uploadFile.getStoreFileName(), uploadFile.getFilePath());
         Teacher teacher = new Teacher(user.getSubject(), user.getUniversity(), login, idPhotoFile);
         return teacherRepository.save(teacher);
     }

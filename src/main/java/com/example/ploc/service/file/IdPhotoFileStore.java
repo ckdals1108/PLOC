@@ -1,8 +1,13 @@
 package com.example.ploc.service.file;
 
+import com.example.ploc.domain.IdPhotoFile;
 import com.example.ploc.dto.file.UploadFile;
+import com.example.ploc.repository.IdPhotoFileRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,13 +17,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class IdPhotoFileStore {
+    private final IdPhotoFileRepository idPhotoFileRepository;
+
     @Value("${file.dir}")
     private String fileDir;
     private String idPhoto = "/idPhoto";
 
     public String getFullPath(String fileName) {
         return fileDir + datePath() + fileName;
+    }
+
+    public String getFileUrlPath(String fileName, String filePath){
+        return filePath + fileName;
+    }
+
+    private String getFolderPath(){
+        return fileDir + datePath();
     }
 
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
@@ -29,7 +45,7 @@ public class IdPhotoFileStore {
         String originalFileName = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFileName);
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
-        return new UploadFile(originalFileName, storeFileName);
+        return new UploadFile(originalFileName, storeFileName, getFolderPath());
     }
 
     private String datePath() {
