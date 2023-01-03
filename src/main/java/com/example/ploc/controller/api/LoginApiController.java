@@ -25,6 +25,14 @@ public class LoginApiController {
     private final LoginService loginService;
     private final TeacherService teacherService;
 
+    @PostMapping
+    public ResponseEntity<LoginAPIDTO> loginOn(@RequestBody LoginDTO loginDTO){
+        Login user = loginService.join(loginDTO);
+        LoginAPIDTO login = new LoginAPIDTO(user.getId(), user.getUserId(), user.getName());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(login);
+    }
+
     @PostMapping("/signup")
     public String signupSave(@RequestBody LoginAPIFormDTO loginFormDTO){
         log.debug("login={}", loginFormDTO);
@@ -40,13 +48,7 @@ public class LoginApiController {
         return "success";
     }
 
-    @PostMapping
-    public ResponseEntity<LoginAPIDTO> loginOn(@RequestBody LoginDTO loginDTO){
-        Login user = loginService.join(loginDTO);
-        LoginAPIDTO login = new LoginAPIDTO(user.getId(), user.getUserId(), user.getName());
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(login);
-    }
+
 
     @GetMapping("/user/{id}")
     public ResponseEntity<LoginEditDTO> userStatus(@PathVariable Long id){

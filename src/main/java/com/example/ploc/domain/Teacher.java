@@ -25,7 +25,7 @@ public class Teacher {
     private List<Match> match;
 
     @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="login_login_id")
+    @JoinColumn(name="login_id")
     private Login login;
 
     @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)

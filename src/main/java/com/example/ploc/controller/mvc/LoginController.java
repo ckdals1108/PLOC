@@ -122,6 +122,16 @@ public class LoginController {
         return "edit";
     }
 
+    @PostMapping("/login/edit")
+    public String edit(@ModelAttribute LoginFormDTO loginFormDTO, RedirectAttributes redirectAttributes,
+                       HttpSession session,
+                       Model model){
+        Long loginId = (Long)session.getAttribute("loginId");
+        loginService.loginEdit(loginId, loginFormDTO);
+        redirectAttributes.addAttribute(loginFormDTO);
+        return "redirect:/";
+    }
+
     @ResponseBody
     @GetMapping("/idPhoto/{fileName}")
     public Resource downloadFile(@PathVariable String fileName) throws MalformedURLException {
@@ -139,17 +149,9 @@ public class LoginController {
 
         String encodeUploadFileName = UriUtils.encode(upLoadFileName, StandardCharsets.UTF_8);
         String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";
+
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
-    }
-
-    @PostMapping("/login/edit")
-    public String edit(@ModelAttribute LoginFormDTO loginFormDTO,
-                       HttpSession session,
-                       Model model){
-        Long loginId = (Long)session.getAttribute("loginId");
-        loginService.loginEdit(loginId, loginFormDTO);
-        return "redirect:/";
     }
 }
