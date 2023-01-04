@@ -1,6 +1,6 @@
 package com.example.ploc.service.web.validator;
 
-import com.example.ploc.dto.LoginFormDTO;
+import com.example.ploc.dto.login.LoginFormDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

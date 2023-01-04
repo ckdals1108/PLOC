@@ -3,9 +3,9 @@ package com.example.ploc.controller.mvc;
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
-import com.example.ploc.dto.LoginDTO;
-import com.example.ploc.dto.LoginEditDTO;
-import com.example.ploc.dto.LoginFormDTO;
+import com.example.ploc.dto.login.LoginDTO;
+import com.example.ploc.dto.login.LoginEditDTO;
+import com.example.ploc.dto.login.LoginFormDTO;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
 import com.example.ploc.service.file.IdPhotoFileStore;
@@ -105,8 +105,7 @@ public class LoginController {
 
     @GetMapping("/withdrawal")
     public String withdrawal(HttpServletRequest request){
-        session = request.getSession(false);
-        Long loginId = (Long)session.getAttribute("loginId");
+        Long loginId = getSession(request);
         loginService.withdrawal(loginId);
         session.invalidate();
         return "redirect:/";
@@ -115,7 +114,7 @@ public class LoginController {
     @GetMapping("/login/edit")
     public String editForm(HttpServletRequest request, Model model)
     {
-        Long loginId = (Long)request.getSession(false).getAttribute("loginId");
+        Long loginId = getSession(request);
         LoginEditDTO user = loginService.loginDetail(loginId);
         model.addAttribute("login",user);
         model.addAttribute("id",loginId);
@@ -124,9 +123,8 @@ public class LoginController {
 
     @PostMapping("/login/edit")
     public String edit(@ModelAttribute LoginFormDTO loginFormDTO, RedirectAttributes redirectAttributes,
-                       HttpSession session,
-                       Model model){
-        Long loginId = (Long)session.getAttribute("loginId");
+                       HttpServletRequest request, Model model){
+        Long loginId = getSession(request);
         loginService.loginEdit(loginId, loginFormDTO);
         redirectAttributes.addAttribute(loginFormDTO);
         return "redirect:/";
@@ -153,5 +151,11 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
+    }
+
+    private Long getSession(HttpServletRequest request) {
+        session = request.getSession(false);
+        Long loginId = (Long)session.getAttribute("loginId");
+        return loginId;
     }
 }

@@ -3,10 +3,9 @@ package com.example.ploc.service;
 import com.example.ploc.domain.IdPhotoFile;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
-import com.example.ploc.dto.LoginFormDTO;
 import com.example.ploc.dto.MatchTableBoardDTO;
-import com.example.ploc.dto.TeacherDTO;
 import com.example.ploc.dto.file.UploadFile;
+import com.example.ploc.dto.login.LoginFormDTO;
 import com.example.ploc.repository.LoginRepository;
 import com.example.ploc.repository.TeacherRepository;
 import com.example.ploc.service.file.IdPhotoFileStore;
@@ -54,11 +53,6 @@ public class TeacherService {
     public Teacher findWithIdPhotoFile(Long id){
         Teacher teacher = teacherRepository.findWithIdPhotoFile(id);
         return teacher;
-    }
-
-    public TeacherDTO findTeacherWithLogin(Long id){
-        Teacher teacher = teacherRepository.findWithId(id);
-        return new TeacherDTO(teacher);
     }
 
     public List<Teacher> findAllWithName(){

@@ -1,4 +1,4 @@
-package com.example.ploc.dto;
+package com.example.ploc.dto.login;
 
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;

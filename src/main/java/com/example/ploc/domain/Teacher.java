@@ -1,7 +1,6 @@
 package com.example.ploc.domain;
 
-import com.example.ploc.dto.LoginFormDTO;
-import com.example.ploc.dto.file.UploadFile;
+import com.example.ploc.dto.login.LoginFormDTO;
 import lombok.Getter;
 
 import javax.persistence.*;

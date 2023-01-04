@@ -26,25 +26,9 @@ public class MatchRepository {
         return em.find(Match.class, matchId);
     }
 
-    public List<Match> findALl(Long id) {
-        return em.createQuery("select m from Match m where m.login.id = :id" +
-                " order by m.login.id asc").setParameter("id", id).getResultList();
-    }
-
     public List<MatchTableBoardListDTO> findALlWithName(Long id) {
         return em.createQuery("select new com.example.ploc.dto.MatchTableBoardListDTO(m.id, l.name, t.university, t.subject, m.timesOfWeek, m.wageOfDay) from Match m join m.teacher t join m.login l where m.login.id = :id" +
                 " order by m.id asc").setParameter("id", id).getResultList();
-    }
-
-    public List<Match> findLoginTeacher(Long id){
-        List match = em.createQuery("select m from Match m where m.login.id = :id")
-                .setParameter("id", id)
-                .getResultList();
-        List match1 = em.createQuery("select m from Match m where m.teacher.id = :id")
-                .setParameter("id", id)
-                .getResultList();
-        match.addAll(match1);
-        return match;
     }
 
     public List<MatchTableBoardListDTO> findALlWithNameType(Long id, String type, String search) {

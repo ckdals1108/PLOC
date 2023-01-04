@@ -1,8 +1,8 @@
 package com.example.ploc.domain;
 
-import com.example.ploc.dto.LoginFormDTO;
+import com.example.ploc.dto.login.LoginFormDTO;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 public class Login {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +35,7 @@ public class Login {
     @Enumerated(EnumType.STRING)
     private Identity identity;
 
-    public Login(){
+    protected Login(){
 
     }
 
@@ -45,22 +46,10 @@ public class Login {
         this.identity = identity;
     }
 
-    public void removeTeacher(){
-        teacher = null;
-    }
-
     public void edit(LoginFormDTO login){
         this.userId = login.getUserId();
         this.password = login.getPassword();
         this.name = login.getName();
         this.identity = login.getIdentity();
-    }
-
-    public void edit(Login login, Teacher teacher){
-        this.userId = login.getUserId();
-        this.password = login.getPassword();
-        this.name = login.getName();
-        this.identity = login.getIdentity();
-        this.teacher = teacher;
     }
 }

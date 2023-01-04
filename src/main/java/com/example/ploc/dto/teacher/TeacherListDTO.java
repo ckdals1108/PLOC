@@ -1,4 +1,4 @@
-package com.example.ploc.dto;
+package com.example.ploc.dto.teacher;
 
 import lombok.Getter;
 import lombok.Setter;

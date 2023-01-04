@@ -1,4 +1,4 @@
-package com.example.ploc.dto;
+package com.example.ploc.dto.teacher;
 
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;

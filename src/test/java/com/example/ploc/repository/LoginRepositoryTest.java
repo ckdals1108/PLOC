@@ -2,16 +2,14 @@ package com.example.ploc.repository;
 
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
-import com.example.ploc.domain.Teacher;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -21,43 +19,16 @@ class LoginRepositoryTest {
     @Autowired TeacherRepository teacherRepository;
 
     @Test
-    @Rollback(false)
-    public void save() throws Exception{
+    public void findWithUserId() throws Exception{
         //given
-        Login login = new Login("qwer", "qwer","qwer", Identity.STUDENT);
+        Login temp = new Login("test","test","test", Identity.STUDENT);
+        Login login = loginRepository.save(temp);
 
         //when
-        loginRepository.save(login);
+        Login test = (Login)loginRepository.findWithUserId("test").get(0);
 
         //then
+        Assertions.assertThat(login).isEqualTo(test);
     }
 
-    @Test
-    @Rollback(false)
-    public void join() throws Exception{
-        //given
-        Login login = new Login("qwer", "qwer","qwer", Identity.TEACHER);
-        loginRepository.save(login);
-        //when
-//        Login login2 = loginRepository.findByUserId(login.getUserId());
-
-        //then
-//        assertThat(login).isEqualTo(login2);
-    }
-
-    @Test
-    @Rollback(false)
-    public void findTeacherId() throws Exception{
-        //given
-        Login login = new Login("qwer", "qwer","qwer", Identity.TEACHER);
-        Teacher teacher = new Teacher("asdf", "asdf", login);
-        teacherRepository.save(teacher);
-
-        //when
-        Login login1 = loginRepository.findByTeacherId(teacher.getId());
-
-        //then
-        log.debug(login1.toString());
-
-    }
 }

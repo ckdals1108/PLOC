@@ -23,30 +23,17 @@ public class LoginRepository {
     }
 
     public Login findById(Long id){
-        Login login = em.find(Login.class, id);
-        return login;
+        return em.find(Login.class, id);
     }
 
-    public List findByUserId(String userId){
-        List login = em.createQuery("select l from Login l where l.userId = :userId")
+    public Optional<Login> findWithUserId(String userId){
+        List<Login> list = em.createQuery("select l from Login l where l.userId = :userId", Login.class)
                 .setParameter("userId", userId)
                 .getResultList();
-        return login;
-    }
-
-    public Login findByTeacherId(Long id){
-        Object login = em.createQuery("select l from Login l join Teacher t where l.teacher.id=:teacherId")
-                .setParameter("teacherId", id)
-                .getResultList();
-        return (Login)login;
-    }
-
-    public Login findTeacher(Long id){
-        Object login = em.createQuery("select l from Login l join fetch l.teacher t" +
-                " where l.teacher.id = :teacherId")
-                .setParameter("teacherId", id)
-                .getSingleResult();
-        return (Login)login;
+        if(!list.isEmpty())
+            return Optional.ofNullable(list.get(0));
+        else
+            return null;
     }
 
     public void remove(Long id){

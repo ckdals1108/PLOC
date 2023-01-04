@@ -1,10 +1,7 @@
 package com.example.ploc.repository;
 
-import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
-import com.example.ploc.dto.TeacherListDTO;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
