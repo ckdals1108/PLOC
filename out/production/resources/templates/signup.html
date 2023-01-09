@@ -2,16 +2,18 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>POLC 대학생과외</title>
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
     <link href="/css/signup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/bootstrap.css">
     <script th:inline="javascript">
         $(document).ready(function() {
-                if($("input[name=identity]:checked").val() == "TEACHER"){
-                    $('.teacherDiv').css('display','block');
-                }else if($("input[name=identity]:checked").val() == "STUDENT"){
-                    $('.teacherDiv').css('display','none');
-                }
+            if($("input[name=identity]:checked").val() == "TEACHER"){
+                $('.teacherDiv').css('display','block');
+            }else if($("input[name=identity]:checked").val() == "STUDENT"){
+                $('.teacherDiv').css('display','none');
+            }
 
             $("input:radio").click(function() {
                 if($("input[name=identity]:checked").val() == "TEACHER"){
@@ -24,32 +26,90 @@
     </script>
 </head>
 <body>
-<form action="/login/signup" enctype="multipart/form-data" th:object="${login}" method="post">
-    <p><label>ID</label><input type="text" th:field="*{userId}"/></p>
-    <p class="field-error" th:errors="*{userId}">아이디 오류</p>
-    <p><label>password</label><input type="password" th:field="*{password}"/></p>
-    <p class="field-error" th:errors="*{password}">패스워드 오류</p>
-    <p><label>이름</label><input type="text" th:field="*{name}"/></p>
-    <p class="field-error" th:errors="*{name}">이름 오류</p>
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2>PLOC 대학생 과외</h2>
+    </div>
+    <hr class="mb-4">
+    <form th:action enctype="multipart/form-data" th:object="${login}" method="post">
+        <div th:if="${duplicate}" th:text="${duplicate}" class="row alert mb-3 alert-danger" role="alert">
+            중복 확인
+        </div>
+        <div class="row mb-3">
+            <label for="userId" class="col-sm-2 col-form-label">Id</label>
+            <div class="col-sm-10">
+                <input type="text" id="userId" class="form-control" th:field="*{userId}">
+            </div>
+            <div>
+                <p class="field-error" th:errors="*{userId}">ID 오류</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="password" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" id="password" class="form-control" th:field="*{password}">
+            </div>
+            <div>
+                <p class="field-error" th:errors="*{password}">패스워드 오류</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="name" class="col-sm-2 col-form-label">이름</label>
+            <div class="col-sm-10">
+                <input type="text" id="name" class="form-control" th:field="*{name}">
+            </div>
+            <div>
+                <p class="field-error" th:errors="*{name}">이름 오류</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div th:each="type : ${identityTypes}" class="col-3 teacherBox form-check form-check-inline">
+                <input type="radio" th:field="${login.identity}" th:value="${type.name()}"
+                       th:classappend="${#strings.equals(type.description, '대학생') ? 'teacher':'student'}">
+                <label th:for="${#ids.prev('identity')}" th:text="${type.description}">신원</label>
+            </div>
+            <div>
+                <p class="field-error" th:errors="*{identity}">신원 오류</p>
+            </div>
+        </div>
 
-    <div th:each="type : ${identityTypes}" class="teacherBox">
-        <input type="radio" th:field="${login.identity}" th:value="${type.name()}"
-               th:classappend="${#strings.equals(type.description, '대학생') ? 'teacher':'student'}"/>
-        <label th:for="${#ids.prev('identity')}" th:text="${type.description}">신원</label>
-    </div>
-    <br/>
-    <div class="teacherDiv">
-        <p><label>대학교</label><input type="text" th:field="${login.university}"/></p>
-        <p class="field-error" th:errors="${login.university}">대학 오류</p>
-        <p><label>과목</label><input type="text" th:field="${login.subject}"/></p>
-        <p class="field-error" th:errors="${login.subject}">과목 오류</p>
-        <p><label>파일</label><input type="file" name="attachFile"></p>
-    </div>
-    <p class="field-error" th:errors="*{identity}">신원 오류</p>
+        <div class="teacherDiv">
+            <div class="row mb-3">
+                <label for="university" class="col-sm-2 col-form-label">대학</label>
+                <div class="col-sm-10">
+                    <input type="text" id="university" class="form-control" th:field="*{university}">
+                </div>
+                <div>
+                    <p class="field-error" th:errors="*{university}">대학 오류</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="subject" class="col-sm-2 col-form-label">과목</label>
+                <div class="col-sm-10">
+                    <input type="text" id="subject" class="form-control" th:field="*{subject}">
+                </div>
+                <div>
+                    <p class="field-error" th:errors="*{university}">과목 오류</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <label for="file" class="col-sm-2 col-form-label">대학 증명서</label>
+                </div>
+                <div class="col-12">
+                    <input type="file" id="file" name="attachFile"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <button type="submit" class="btn w-100 btn-primary btn-lg text-white">회원가입</button>
+            </div>
+        </div>
+    </form>
     <div>
-        <button type="submit" th:text="${id}?수정하기:회원가입">회원가입</button>
+        <button class="btn w-100 btn-secondary btn-lg text-white" th:onclick="|location.href='@{/}'|">홈으로</button>
     </div>
-</form>
-<button th:onclick="|location.href='@{/}'|">홈으로</button>
+</div>
 </body>
 </html>

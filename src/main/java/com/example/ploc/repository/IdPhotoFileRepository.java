@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,6 +26,27 @@ public class IdPhotoFileRepository {
     public IdPhotoFile findById(Long id){
         IdPhotoFile idPhotoFile = em.find(IdPhotoFile.class, id);
         return idPhotoFile;
+    }
+
+    public Optional<IdPhotoFile> findByTeacherId(Long id){
+        List<IdPhotoFile> idPhotoFile = em.createQuery("select i from IdPhotoFile i where i.teacher.id=:id", IdPhotoFile.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        if(!idPhotoFile.isEmpty())
+            return Optional.ofNullable(idPhotoFile.get(0));
+
+        return Optional.empty();
+    }
+
+    public Optional<IdPhotoFile> findByLoginId(Long id){
+        List<IdPhotoFile> idPhotoFile = em.createQuery("select i from IdPhotoFile i join i.teacher.login l where l.id =:id", IdPhotoFile.class)
+                .setParameter("id", id)
+                .getResultList();
+        if(!idPhotoFile.isEmpty())
+            return Optional.of(idPhotoFile.get(0));
+
+        return Optional.empty();
     }
 
     public void remove(Long id){

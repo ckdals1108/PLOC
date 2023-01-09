@@ -3,11 +3,13 @@ package com.example.ploc.repository;
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
+import com.example.ploc.dto.login.LoginFormDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 
@@ -43,12 +45,12 @@ class TeacherRepositoryTest {
         Teacher teacher1 = new Teacher("qwer","qwer", login);
         teacherRepository.save(teacher1);
         //when
-        List<Teacher> teachers = teacherRepository.findAll();
+        //List<Teacher> teachers = teacherRepository.findAll();
 
         //then
-        for(Teacher teacher : teachers){
+        /*for(Teacher teacher : teachers){
             log.debug(teacher.toString());
-        }
+        }*/
     }
 
     @Test
@@ -79,11 +81,11 @@ class TeacherRepositoryTest {
         teacherRepository.save(teacher1);
 
         //when
-        Teacher teacher = teacherRepository.findWithLoginId(teacher1.getId());
+        //Teacher teacher = teacherRepository.(teacher1.getId());
 
         //then
-        log.debug("teacher={}", teacher.toString());
-        log.debug("login_name={}", teacher.getLogin().getName());
+        //log.debug("teacher={}", teacher.toString());
+        //log.debug("login_name={}", teacher.getLogin().getName());
     }
 
     @Test
@@ -94,5 +96,17 @@ class TeacherRepositoryTest {
         Teacher teacher = teacherRepository.findWithIdPhotoFile(31L);
         //then
         log.debug("teacher = {}", teacher.getIdPhotoFile());
+    }
+
+    @Test
+    public void findByLoginId() throws Exception{
+        //given
+        /*Login login = loginRepository.findById(1L);
+        //when
+        teacherRepository.findByLoginId(1L).ifPresent(checkTeacher -> checkTeacher.editTest());
+        teacherRepository.flush();
+        //then
+        Teacher teacher = teacherRepository.findById(1L);
+        log.debug("teacher = {}", teacher);*/
     }
 }

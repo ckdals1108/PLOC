@@ -1,8 +1,11 @@
 package com.example.ploc.service.file;
 
 import com.example.ploc.domain.IdPhotoFile;
+import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.file.UploadFile;
+import com.example.ploc.exception.UserException;
 import com.example.ploc.repository.IdPhotoFileRepository;
+import com.example.ploc.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,23 +17,30 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.UUID;
 
-@Component
+@Service
+@Transactional
 @RequiredArgsConstructor
 public class IdPhotoFileStore {
     private final IdPhotoFileRepository idPhotoFileRepository;
+    private final TeacherRepository teacherRepository;
 
     @Value("${file.dir}")
     private String fileDir;
     private String idPhoto = "/idPhoto";
 
+    public IdPhotoFile findByUserId(Long id){
+        return idPhotoFileRepository.findByLoginId(id).orElseGet(() -> new IdPhotoFile(null, null, null));
+    }
+
     public String getFullPath(String fileName) {
         return fileDir + datePath() + fileName;
     }
 
-    public String getFileUrlPath(String fileName, String filePath){
-        return filePath + fileName;
+    public String getFilePath(IdPhotoFile idPhotoFile){
+        return idPhotoFile.getFilePath() + idPhotoFile.getStoreFileName();
     }
 
     private String getFolderPath(){
@@ -38,7 +48,7 @@ public class IdPhotoFileStore {
     }
 
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
-        if(multipartFile.isEmpty()){
+        if(multipartFile == null || multipartFile.isEmpty()){
             return null;
         }
 

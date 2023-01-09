@@ -2,12 +2,11 @@ package com.example.ploc.controller.api;
 
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
-import com.example.ploc.domain.Teacher;
+import com.example.ploc.dto.api.LoginAPIDTO;
 import com.example.ploc.dto.login.LoginDTO;
 import com.example.ploc.dto.login.LoginEditDTO;
 import com.example.ploc.dto.login.LoginFormDTO;
-import com.example.ploc.dto.api.LoginAPIDTO;
-import com.example.ploc.dto.api.LoginAPIFormDTO;
+import com.example.ploc.exception.UserException;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 
 @RequiredArgsConstructor
@@ -34,21 +35,14 @@ public class LoginApiController {
     }
 
     @PostMapping("/signup")
-    public String signupSave(@RequestBody LoginAPIFormDTO loginFormDTO){
+    public String signupSave(@RequestBody LoginFormDTO loginFormDTO) throws IOException {
         log.debug("login={}", loginFormDTO);
-        if(loginFormDTO.getIdentity().equals(Identity.STUDENT)){
-            Login login = new Login(loginFormDTO.getUserId(), loginFormDTO.getPassword(), loginFormDTO.getName(), loginFormDTO.getIdentity());
-            loginService.create(login);
-        }
-        else {
-            Login login = new Login(loginFormDTO.getUserId(), loginFormDTO.getPassword(), loginFormDTO.getName(), loginFormDTO.getIdentity());
-            Teacher teacher = new Teacher(loginFormDTO.getSubject(), loginFormDTO.getUniversity(), login);
-            teacherService.create(teacher);
-        }
-        return "success";
+        if(loginFormDTO.getIdentity().equals(Identity.STUDENT))
+            loginService.create(loginFormDTO);
+        else
+            teacherService.create(loginFormDTO);
+         return "success";
     }
-
-
 
     @GetMapping("/user/{id}")
     public ResponseEntity<LoginEditDTO> userStatus(@PathVariable Long id){
@@ -59,8 +53,11 @@ public class LoginApiController {
 
     @PutMapping("/user/{id}")
     public String userEdit(@PathVariable Long id,
-                           @RequestBody LoginFormDTO loginFormDTO){
-        loginService.loginEdit(id, loginFormDTO);
+                           @RequestBody LoginEditDTO loginEditDTO) throws IOException {
+        if(loginEditDTO.getIdentity() == Identity.STUDENT)
+            loginService.edit(id, loginEditDTO);
+        else
+            teacherService.edit(id, loginEditDTO, null, false);
         return "success";
     }
 

@@ -3,21 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>POLC 대학생과외</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
 </head>
 <body>
-    <ul>
-        <li th:if="${!isSession}"><a href="/login">로그인</a></li>
-        <li th:unless="${!isSession}"><a href="/logout">로그아웃</a></li>
-        <br/>
-        <li th:if="${!isSession}"><a  th:href="@{/login/signup}" href="/login/signup">회원가입</a></li>
-        <br/>
-        <li th:if="${isSession}"><a href="/member/teacher">대학생 찾기</a> </li>
-        <br/>
-        <li th:if="${isSession}"><a href="/matching">나의 매칭 보기</a> </li>
-        <br/>
-        <li th:if="${isSession}"><a href="/login/edit">나의 정보 보기</a></li>
-        <br/>
-        <li th:if="${isSession}"><a href="/withdrawal">회원탈퇴</a></li>
-    </ul>
+    <div class="container" style="max-width: 600px">
+        <div class="py-5 text-center">
+            <h2>PLOC 대학생 과외</h2>
+        </div>
+        <hr class="mb-4">
+        <div class="row">
+            <div class="row mb-3">
+                <div class="col">
+                    <button class="btn w-100 btn-primary btn-lg text-white" th:with="adr=${!isSession?'/login':'/logout'}, value=${!isSession?'로그인':'로그아웃'}"
+                            th:text="${!isSession?'로그인':'로그아웃'}" th:onclick="|location.href='@{${adr}}'|">로그인</button>
+                </div>
+                <div class="col" th:if="${!isSession}">
+                    <button class="btn w-100 btn-primary btn-lg text-white" th:onclick="|location.href='@{/login/signup}'|">회원가입</button>
+                </div>
+            </div>
+
+            <div class="row mb-3" th:if="${isSession}">
+                <div class="col">
+                    <button class="btn w-100 btn-primary btn-lg text-white" th:onclick="|location.href='@{/member/teacher}'|">대학생 찾기</button>
+                </div>
+                <div class="col">
+                    <button class="btn w-100 btn-primary btn-lg text-white" th:onclick="|location.href='@{/matching}'|">나의 매칭</button>
+                </div>
+            </div>
+
+            <div class="row mb-3" th:if="${isSession}">
+                <div class="col">
+                    <button class="btn w-100 btn-primary btn-lg text-white" th:onclick="|location.href='@{/login/edit}'|">나의 정보</button>
+                </div>
+                <div class="col">
+                    <button class="btn w-100 btn-primary btn-lg text-white" th:onclick="|location.href='@{/withdrawal}'|">회원탈퇴</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

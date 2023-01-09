@@ -2,10 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>대학생 리스트</title>
+    <title>POLC 대학생과외</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
 </head>
 <body>
-    <table border="1">
+    <div class="container" style="max-width: 600px">
+        <div class="py-5 text-center">
+            <h2>PLOC 대학생 과외</h2>
+        </div>
+        <hr class="mb-4">
+    <table class="table table-striped table-hover">
         <tr>
             <td>번호</td>
             <td>이름</td>
@@ -14,14 +20,14 @@
             <td></td>
         </tr>
         <tr th:each="teacher : ${teachers}">
-            <td th:text="${teacher.id}"></td>
+            <td th:text="${teacherStat.count}"></td>
             <td th:text="${teacher.login.name}"></td>
             <td th:text="${teacher.university}"></td>
             <td th:text="${teacher.subject}"></td>
-            <td><button th:onclick="|location.href='@{/member/teacher/{teacherId}(teacherId=${teacher.id})}'|">상세보기</button></td>
+            <td><button class="btn btn-link" th:onclick="|location.href='@{/member/teacher/{teacherId}(teacherId=${teacher.id})}'|">상세보기</button></td>
         </tr>
     </table>
-    <button th:onclick="|location.href='@{/}'|">홈으로</button>
-
+    <button class="btn w-100 btn-secondary btn-lg text-white" th:onclick="|location.href='@{/}'|">홈으로</button>
+    </div>
 </body>
 </html>

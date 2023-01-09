@@ -24,31 +24,24 @@ public class LoginService {
     private final LoginRepository loginRepository;
     private final TeacherRepository teacherRepository;
 
-    public Login create(Login login){
-        Optional<Login> checkLogin = loginRepository.findWithUserId(login.getUserId());
-        if(!checkLogin.isPresent()){
+    public Login create(LoginFormDTO loginFormDTO){
+        Optional<Login> checkLogin = loginRepository.findWithUserId(loginFormDTO.getUserId());
+
+        if(checkLogin.isPresent())
             throw new UserException("중복된 회원이 있습니다.");
-        }
+
+        Login login = new Login(loginFormDTO.getUserId(), loginFormDTO.getPassword(), loginFormDTO.getName(), loginFormDTO.getIdentity());
+
         return loginRepository.save(login);
     }
 
     public Login join(LoginDTO login){
-        Login database;
-        Optional<Login> checkLogin = loginRepository.findWithUserId(login.getUserId());
+        Login checkLogin = loginRepository.findWithUserId(login.getUserId()).orElseThrow(() -> new UserException("아이디 또는 비밀번호를 잘못 입력하셨습니다."));
 
-        if(!checkLogin.isPresent())
-            throw new UserException("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
-        else
-            database = checkLogin.get();
-
-        if(!database.getPassword().equals(login.getPassword()))
+        if(!checkLogin.getPassword().equals(login.getPassword()))
             throw new UserException("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
 
-        return database;
-    }
-
-    public Login findById(Long id){
-        return loginRepository.findById(id);
+        return checkLogin;
     }
 
     public void withdrawal(Long id){
@@ -66,18 +59,23 @@ public class LoginService {
             return new LoginEditDTO(login);
         }
         else{
-            Teacher teacher = teacherRepository.findWithLoginId(id);
+            Teacher teacher = teacherRepository.findByLoginId(id).orElseThrow(() -> new UserException("해당 유저가 없습니다."));
+            log.debug("teacher={}", teacher);
             return new LoginEditDTO(login, teacher);
         }
     }
 
-    public void loginEdit(Long id, LoginFormDTO loginFormDTO){
+    public void duplicateUserId(String userId, Long id){
+        loginRepository.findWithUserId(userId).ifPresent((Login checkLogin)->{
+            if(id != checkLogin.getId()){
+                throw new UserException("중복된 아이디가 있습니다.");
+            }
+        });
+    }
+
+
+    public void edit(Long id, LoginEditDTO loginEditDTO){
         Login login = loginRepository.findById(id);
-        login.edit(loginFormDTO);
-        if(loginFormDTO.getIdentity().equals(Identity.TEACHER))
-        {
-            Teacher teacher = teacherRepository.findWithLoginId(id);
-            teacher.edit(loginFormDTO);
-        }
+        login.edit(loginEditDTO);
     }
 }

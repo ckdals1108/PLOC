@@ -1,5 +1,6 @@
 package com.example.ploc.domain;
 
+import com.example.ploc.dto.login.LoginEditDTO;
 import com.example.ploc.dto.login.LoginFormDTO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class Login {
     @OneToMany(mappedBy="login", cascade= CascadeType.REMOVE, orphanRemoval = true)
     private List<Match> match;
 
-    @OneToOne(mappedBy="login", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy="login", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
     private Teacher teacher;
 
     @Enumerated(EnumType.STRING)
@@ -46,7 +47,7 @@ public class Login {
         this.identity = identity;
     }
 
-    public void edit(LoginFormDTO login){
+    public void edit(LoginEditDTO login){
         this.userId = login.getUserId();
         this.password = login.getPassword();
         this.name = login.getName();

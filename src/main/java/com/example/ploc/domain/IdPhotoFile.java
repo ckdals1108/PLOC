@@ -13,7 +13,7 @@ public class IdPhotoFile {
     @Column(name="idPhotoFile_id")
     private Long id;
     
-    @OneToOne(mappedBy="idPhotoFile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy="idPhotoFile", cascade = CascadeType.PERSIST)
     private Teacher teacher;
 
     private String upLoadFileName;

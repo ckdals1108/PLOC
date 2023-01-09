@@ -2,38 +2,51 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>매칭</title>
+    <title>POLC 대학생과외</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
 </head>
 <body>
-<table border="1">
-    <tr>
-        <td >번호</td>
-        <td th:text="#{label.name}">이름</td>
-        <td th:text="#{label.university}">학교</td>
-        <td th:text="#{label.subject}">과목</td>
-        <td th:text="#{label.wageOfDay}">일급</td>
-        <td th:text="#{label.timesOfWeek}">주횟수</td>
-    </tr>
-    <tr th:each="match : ${matches}">
-        <td th:text="${match.id}"></td>
-        <td th:text="${match.name}"></td>
-        <td th:text="${match.university}"></td>
-        <td th:text="${match.subject}"></td>
-        <td th:text="${match.wageOfDay}"></td>
-        <td th:text="${match.timesOfWeek}"></td>
-    </tr>
-</table>
-<button th:onclick="|location.href='@{/matching}'|">전체보기</button>
-<div>
-    <form th:action method="post">
-        <select name="type" value="선택">
-            <option th:text="#{label.subject}" value="subject">과목</option>
-            <option th:text="#{label.university}" value="university">대학</option>
-        </select>
-        <input type="text" name="search" placeholder="검색어를 입력하세요">
-        <button th:text="#{label.search}" type="submit">검색</button>
-        <button th:text="#{label.home}" th:onclick="|location.href='@{/}'|">홈으로</button>
-    </form>
-</div>
+    <div class="container" style="max-width: 600px">
+        <div class="py-5 text-center">
+            <h2>PLOC 대학생 과외</h2>
+        </div>
+        <hr class="mb-4">
+        <div>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <td >번호</td>
+                    <td th:text="#{label.name}">이름</td>
+                    <td th:text="#{label.university}">학교</td>
+                    <td th:text="#{label.subject}">과목</td>
+                    <td th:text="#{label.wageOfDay}">일급</td>
+                    <td th:text="#{label.timesOfWeek}">주횟수</td>
+                </tr>
+                <tr th:each="match : ${matches}">
+                    <td th:text="${matchStat.count}"></td>
+                    <td th:text="${match.name}"></td>
+                    <td th:text="${match.university}"></td>
+                    <td th:text="${match.subject}"></td>
+                    <td th:text="${{match.wageOfDay}}"></td>
+                    <td th:text="${match.timesOfWeek}"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <button class="btn btn-primary btn-sm" th:onclick="|location.href='@{/matching}'|">전체보기</button>
+            </div>
+            <div class="col-sm-9">
+                <form th:action method="post">
+                    <select name="type" value="선택">
+                        <option th:text="#{label.subject}" value="subject">과목</option>
+                        <option th:text="#{label.university}" value="university">대학</option>
+                    </select>
+                    <input type="text" name="search" placeholder="검색어를 입력하세요">
+                    <button class="btn btn-primary btn-sm" th:text="#{label.search}" type="submit">검색</button>
+                    <button type="button" class="btn btn-secondary btn-sm" th:text="#{label.home}" th:onclick="|location.href='@{/}'|">홈으로</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

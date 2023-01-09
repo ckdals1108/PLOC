@@ -61,6 +61,16 @@ public class LoginFormDTO {
         this.university = university;
     }
 
+    public LoginFormDTO(String userId, String password, String name, Identity identity, String subject, String university, MultipartFile attachFile) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.identity = identity;
+        this.subject = subject;
+        this.university = university;
+        this.attachFile = attachFile;
+    }
+
     public Login getLogin(LoginFormDTO loginFormDTO){
         return new Login(userId, password, name, identity);
     }

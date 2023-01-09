@@ -1,11 +1,14 @@
 package com.example.ploc.controller.mvc;
 
+import com.example.ploc.domain.IdPhotoFile;
 import com.example.ploc.domain.Identity;
 import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.login.LoginDTO;
 import com.example.ploc.dto.login.LoginEditDTO;
 import com.example.ploc.dto.login.LoginFormDTO;
+import com.example.ploc.dto.login.LoginSaveDTO;
+import com.example.ploc.exception.UserException;
 import com.example.ploc.service.LoginService;
 import com.example.ploc.service.TeacherService;
 import com.example.ploc.service.file.IdPhotoFileStore;
@@ -22,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriUtils;
 
@@ -40,7 +44,6 @@ public class LoginController {
     private final TeacherService teacherService;
     private final LoginValidator loginValidator;
     private final IdPhotoFileStore idPhotoFileStore;
-    HttpSession session;
 
     @ModelAttribute("identityTypes")
     public Identity[] identityTypes() {
@@ -48,17 +51,26 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String loginForm(){
+    public String loginForm(Model model){
+        model.addAttribute("login", new LoginDTO(null, null));
+        model.addAttribute("loginError",null);
         return "login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam(defaultValue="/") String redirectURL,
-                        @ModelAttribute LoginDTO loginDTO,
-                        HttpServletRequest request){
-        Login login = loginService.join(loginDTO);
-        session = request.getSession();
+                        @ModelAttribute("login") LoginDTO loginDTO, BindingResult bindingResult,
+                        HttpSession session, Model model){
+        Login login;
+        try{
+            login = loginService.join(loginDTO);
+        }catch(UserException e) {
+            model.addAttribute("loginError",e.getMessage());
+            return "login";
+        }
+
         session.setAttribute("loginId", login.getId());
+        session.setAttribute("userName", login.getName());
         return "redirect:" + redirectURL;
     }
 
@@ -66,12 +78,13 @@ public class LoginController {
     public String signUpForm(Model model){
         model.addAttribute("login",new LoginFormDTO());
         model.addAttribute("id",null);
+        model.addAttribute("duplicate",null);
         return "signup";
     }
 
     @PostMapping("/login/signup")
     public String signUp(@Valid @ModelAttribute("login") LoginFormDTO loginFormDTO,
-                         BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
+                         BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) throws IOException {
         if(loginFormDTO.getIdentity() == null){
             bindingResult.rejectValue("identity", "required");
         }
@@ -89,10 +102,20 @@ public class LoginController {
         }
 
         if(loginFormDTO.getIdentity().equals(Identity.STUDENT)) {
-            Login login = loginService.create(loginFormDTO.getLogin(loginFormDTO));
+            try{
+                Login login = loginService.create(loginFormDTO);
+            }catch(UserException e){
+                model.addAttribute("duplicate", e.getMessage());
+                return "signup";
+            }
         }
-        else {
-            Teacher login = teacherService.create(loginFormDTO);
+        else if(loginFormDTO.getIdentity().equals(Identity.TEACHER)){
+           try{
+               Teacher login = teacherService.create(loginFormDTO);
+           }catch(UserException e){
+               model.addAttribute("duplicate", e.getMessage());
+               return "signup";
+           }
         }
         return "redirect:/";
     }
@@ -104,58 +127,66 @@ public class LoginController {
     }
 
     @GetMapping("/withdrawal")
-    public String withdrawal(HttpServletRequest request){
-        Long loginId = getSession(request);
-        loginService.withdrawal(loginId);
+    public String withdrawal(HttpSession session){
+        loginService.withdrawal((Long)session.getAttribute("loginId"));
         session.invalidate();
         return "redirect:/";
     }
 
     @GetMapping("/login/edit")
-    public String editForm(HttpServletRequest request, Model model)
+    public String editForm(HttpSession session, Model model)
     {
-        Long loginId = getSession(request);
+        Long loginId = (Long)session.getAttribute("loginId");
         LoginEditDTO user = loginService.loginDetail(loginId);
         model.addAttribute("login",user);
         model.addAttribute("id",loginId);
+        model.addAttribute("remove",false);
+        model.addAttribute("duplicate",null);
         return "edit";
     }
 
     @PostMapping("/login/edit")
-    public String edit(@ModelAttribute LoginFormDTO loginFormDTO, RedirectAttributes redirectAttributes,
-                       HttpServletRequest request, Model model){
-        Long loginId = getSession(request);
-        loginService.loginEdit(loginId, loginFormDTO);
-        redirectAttributes.addAttribute(loginFormDTO);
+    public String edit(@Valid @ModelAttribute("login") LoginEditDTO loginEditDTO, BindingResult bindingResult,
+                       @RequestParam("changeFile") MultipartFile changeFile,
+                       @RequestParam(value="remove", defaultValue="false" ,required=false) Boolean remove,
+                       Model model, HttpSession session) throws IOException {
+        Long loginId = (Long)session.getAttribute("loginId");
+        try{
+            loginService.duplicateUserId(loginEditDTO.getUserId(), loginId);
+        }catch(UserException e){
+            model.addAttribute("duplicate", e.getMessage());
+            return "edit";
+        }
+
+        if(bindingResult.hasErrors())
+        {
+            return "edit";
+        }
+
+        if(loginEditDTO.getIdentity() == Identity.STUDENT)
+            loginService.edit(loginId, loginEditDTO);
+        else
+            teacherService.edit(loginId, loginEditDTO, changeFile, remove);
         return "redirect:/";
     }
 
     @ResponseBody
-    @GetMapping("/idPhoto/{fileName}")
-    public Resource downloadFile(@PathVariable String fileName) throws MalformedURLException {
-        return new UrlResource("file:" + idPhotoFileStore.getFullPath(fileName));
+    @GetMapping("/idPhoto/{id}")
+    public Resource downloadFile(@PathVariable Long id) throws MalformedURLException {
+        IdPhotoFile idPhotoFile = idPhotoFileStore.findByUserId(id);
+        return new UrlResource("file:" + idPhotoFileStore.getFilePath(idPhotoFile));
     }
 
-    @GetMapping("/attach/{id}")
+   @GetMapping("/attach/{id}")
     public ResponseEntity<Resource> downloadAttach(@PathVariable Long id) throws MalformedURLException {
-        Teacher teacher = teacherService.findWithIdPhotoFile(id);
-        String upLoadFileName = teacher.getIdPhotoFile().getUpLoadFileName();
-        String storeFileName = teacher.getIdPhotoFile().getStoreFileName();
-        String filePath = teacher.getIdPhotoFile().getFilePath();
+       IdPhotoFile idPhotoFile = idPhotoFileStore.findByUserId(id);
+       UrlResource resource = new UrlResource("file:" + idPhotoFileStore.getFilePath(idPhotoFile));
 
-        UrlResource resource = new UrlResource("file:" + filePath + storeFileName);
-
-        String encodeUploadFileName = UriUtils.encode(upLoadFileName, StandardCharsets.UTF_8);
+        String encodeUploadFileName = UriUtils.encode(idPhotoFile.getUpLoadFileName(), StandardCharsets.UTF_8);
         String contentDisposition = "attachment; filename=\"" + encodeUploadFileName + "\"";
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
-    }
-
-    private Long getSession(HttpServletRequest request) {
-        session = request.getSession(false);
-        Long loginId = (Long)session.getAttribute("loginId");
-        return loginId;
     }
 }

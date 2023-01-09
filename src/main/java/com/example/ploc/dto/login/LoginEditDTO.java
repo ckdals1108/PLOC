@@ -5,6 +5,7 @@ import com.example.ploc.domain.Login;
 import com.example.ploc.domain.Teacher;
 import com.example.ploc.dto.file.UploadFile;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
@@ -19,7 +20,10 @@ public class LoginEditDTO {
     private Identity identity;
     private String subject;
     private String university;
-    private UploadFile attachFile;
+    private String upLoadFileName;
+    private String storeFileName;
+    private String filePath;
+    private MultipartFile attachFile;
 
     public LoginEditDTO(){
 
@@ -41,6 +45,14 @@ public class LoginEditDTO {
         this.identity = login.getIdentity();
         this.university = teacher.getUniversity();
         this.subject = teacher.getSubject();
-        attachFile = new UploadFile(teacher.getIdPhotoFile().getUpLoadFileName(), teacher.getIdPhotoFile().getStoreFileName());
+        if(teacher.getIdPhotoFile() != null){
+            storeFileName = teacher.getIdPhotoFile().getStoreFileName();
+            filePath = teacher.getIdPhotoFile().getFilePath();
+            upLoadFileName = teacher.getIdPhotoFile().getUpLoadFileName();
+        }
+    }
+
+    public Login getLogin(LoginEditDTO loginEditDTO){
+        return new Login(loginEditDTO.getUserId(), loginEditDTO.getPassword(),loginEditDTO.getName(), loginEditDTO.getIdentity());
     }
 }

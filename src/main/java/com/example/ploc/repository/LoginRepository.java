@@ -33,7 +33,7 @@ public class LoginRepository {
         if(!list.isEmpty())
             return Optional.ofNullable(list.get(0));
         else
-            return null;
+            return Optional.empty();
     }
 
     public void remove(Long id){

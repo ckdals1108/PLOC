@@ -23,7 +23,10 @@ public class MatchService {
     private final LoginRepository loginRepository;
     private final TeacherRepository teacherRepository;
 
-    public Match create(Match match){
+    public Match create(Long loginId, Long teacherId,MatchingSaveDTO matchingSaveDTO){
+        Login login = loginRepository.findById(loginId);
+        Teacher teacher = teacherRepository.findById(teacherId);
+        Match match = new Match(login, teacher, matchingSaveDTO.getWageOfDay(), matchingSaveDTO.getTimesOfWeek());
         return matchRepository.save(match);
     }
 

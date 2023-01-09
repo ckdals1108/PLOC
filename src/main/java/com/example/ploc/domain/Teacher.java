@@ -1,5 +1,7 @@
 package com.example.ploc.domain;
 
+import com.example.ploc.dto.file.UploadFile;
+import com.example.ploc.dto.login.LoginEditDTO;
 import com.example.ploc.dto.login.LoginFormDTO;
 import lombok.Getter;
 
@@ -48,13 +50,25 @@ public class Teacher {
         this.idPhotoFile = idPhotoFile;
     }
 
+    public void edit(LoginEditDTO loginEditDTO){
+        subject = loginEditDTO.getSubject();
+        university = loginEditDTO.getUniversity();
+        login.edit(loginEditDTO);
+    }
+
+    public void edit(LoginEditDTO loginEditDTO, UploadFile uploadFile){
+        subject = loginEditDTO.getSubject();
+        university = loginEditDTO.getUniversity();
+        login.edit(loginEditDTO);
+        idPhotoFile = new IdPhotoFile(uploadFile.getUpLoadFileName(), uploadFile.getStoreFileName(), uploadFile.getFilePath());
+    }
+
     public void changeIdPhotoFile(IdPhotoFile idPhotoFile){
         this.idPhotoFile = idPhotoFile;
     }
 
-    public void edit(LoginFormDTO login){
-        subject = login.getSubject();
-        university = login.getUniversity();
+    public void removeIdPhotoFile(){
+        idPhotoFile = null;
     }
 
     @Override

@@ -11,15 +11,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 @Slf4j
 public class AppController {
-    HttpSession session;
-
     @GetMapping("/")
     public String home(HttpServletRequest request, Model model){
         boolean isSession = true;
-        session = request.getSession(false);
-        if(session == null) {
+        HttpSession session = request.getSession(false);
+        if(session == null)
             isSession = false;
-        }
         model.addAttribute("isSession", isSession);
         return "main";
     }

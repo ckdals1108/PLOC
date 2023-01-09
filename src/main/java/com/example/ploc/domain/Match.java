@@ -1,6 +1,7 @@
 package com.example.ploc.domain;
 
 import lombok.Getter;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -28,6 +29,7 @@ public class Match {
     private int timesOfWeek;
     //주급
     @NotNull
+    @NumberFormat(pattern="###,###")
     private int wageOfDay;
 
 

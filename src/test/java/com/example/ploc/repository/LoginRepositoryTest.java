@@ -25,7 +25,7 @@ class LoginRepositoryTest {
         Login login = loginRepository.save(temp);
 
         //when
-        Login test = (Login)loginRepository.findWithUserId("test").get(0);
+        Login test = (Login)loginRepository.findWithUserId("test").get();
 
         //then
         Assertions.assertThat(login).isEqualTo(test);

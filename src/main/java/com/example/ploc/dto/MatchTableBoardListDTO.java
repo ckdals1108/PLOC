@@ -3,6 +3,7 @@ package com.example.ploc.dto;
 import com.example.ploc.domain.Match;
 import com.example.ploc.domain.Teacher;
 import lombok.Getter;
+import org.springframework.format.annotation.NumberFormat;
 
 @Getter
 public class MatchTableBoardListDTO {
@@ -11,7 +12,7 @@ public class MatchTableBoardListDTO {
     private String university;
     private String subject;
     private int timesOfWeek;
-    //주급
+    @NumberFormat(pattern="###,###")
     private int wageOfDay;
 
     protected MatchTableBoardListDTO(){

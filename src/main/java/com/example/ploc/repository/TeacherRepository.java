@@ -1,11 +1,13 @@
 package com.example.ploc.repository;
 
 import com.example.ploc.domain.Teacher;
+import com.example.ploc.dto.api.TeachersAPIDTO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TeacherRepository {
@@ -22,25 +24,47 @@ public class TeacherRepository {
         return teacher;
     }
 
-    public List<Teacher> findAll(){
-        return em.createQuery("select t from Teacher t", Teacher.class)
+    public Optional<Teacher> findByIdWithLogin(Long id){
+        List<Teacher> teacher = em.createQuery("select t from Teacher t join fetch t.login where t.id=:id", Teacher.class)
+                .setParameter("id", id)
+                .getResultList();
+        if(!teacher.isEmpty()){
+            return Optional.of(teacher.get(0));
+        }else{
+            return Optional.empty();
+        }
+    }
+
+    public List<Teacher> findAllWithLogin(){
+        return em.createQuery("select t from Teacher t join fetch t.login", Teacher.class)
                 .getResultList();
     }
 
-    public Teacher findWithId(Long id){
-        Object teacher = em.createQuery("select t from Teacher t join fetch t.login" +
-                " where t.id=:id")
-                .setParameter("id", id)
-                .getSingleResult();
-        return (Teacher)teacher;
+    public List<TeachersAPIDTO> findAllWithLoginAPI(){
+        return em.createQuery("select new com.example.ploc.dto.api.TeachersAPIDTO(t.id, t.login.name, t.subject, t.university) from Teacher t join t.login order by t.id asc")
+                .getResultList();
     }
 
-    public Teacher findWithLoginId(Long id){
-        Object teacher = em.createQuery("select t from Teacher t join fetch t.login l" +
-                " where l.id=:id")
+    public Optional<Teacher> findByLoginId(Long id){
+        List<Teacher> teacher = em.createQuery("select t from Teacher t where t.login.id=:id", Teacher.class)
                 .setParameter("id", id)
-                .getSingleResult();
-        return (Teacher)teacher;
+                .getResultList();
+
+        if(!teacher.isEmpty())
+            return Optional.of(teacher.get(0));
+
+        return  Optional.empty();
+    }
+
+    public Optional<Teacher> findByLoginIdWithLogin(Long id){
+        List<Teacher> teacher = em.createQuery("select t from Teacher t join fetch t.login where t.login.id=:id", Teacher.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        if(!teacher.isEmpty())
+            return Optional.of(teacher.get(0));
+
+        return  Optional.empty();
     }
 
     public List<Teacher> findAllWithName(){
@@ -56,7 +80,10 @@ public class TeacherRepository {
     }
 
     public void remove(Long id){
-        Teacher teacher = findWithId(id);
-        em.remove(teacher);
+        findByLoginId(id).ifPresent((Teacher checkTeacher)->em.remove(checkTeacher));
+    }
+
+    public void flush(){
+        em.flush();
     }
 }

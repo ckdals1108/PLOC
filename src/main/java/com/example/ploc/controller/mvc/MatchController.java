@@ -33,18 +33,15 @@ public class MatchController {
     HttpSession session;
 
     @GetMapping("/matching/{id}")
-    public String matchForm(@PathVariable Long id,
-                        Model model){
-        Teacher teacher = teacherService.findWithId(id);
-        MatchFormDTO matchFormDTO = new MatchFormDTO(teacher.getLogin().getName(), teacher.getSubject(), teacher.getUniversity());
-        model.addAttribute("teacher", matchFormDTO);
+    public String matchForm(@PathVariable Long id, Model model){
+        Teacher teacher = teacherService.findByIdWithLogin(id);
+        model.addAttribute("teacher", new MatchFormDTO(teacher.getLogin().getName(), teacher.getSubject(), teacher.getUniversity()));
         return "matchingTable";
     }
 
     @PostMapping("/matching/{id}")
     public String match(@Valid @ModelAttribute("teacher") MatchingSaveDTO matchingSaveDTO, BindingResult bindingResult,
-                        @PathVariable Long id, HttpServletRequest request,
-                        Model model)
+                        @PathVariable Long id, HttpSession session, Model model)
     {
         if(bindingResult.hasErrors())
         {
@@ -52,14 +49,9 @@ public class MatchController {
             return "matchingTable";
         }
 
-        session = request.getSession(false);
-        Long studentId = (Long)(session.getAttribute("loginId"));
-        Login login = loginService.findById(studentId);
-        Teacher teacher = teacherService.findById(id);
-        Match match = new Match(login, teacher, matchingSaveDTO.getWageOfDay(), matchingSaveDTO.getTimesOfWeek());
-        Match matchTable = matchService.create(match);
+        Long loginId = (Long)(session.getAttribute("loginId"));
+        Match matchTable = matchService.create(loginId, id, matchingSaveDTO);
         MatchTableBoardDTO matchBord = teacherService.findLogin(id);
-        log.debug("teacherLogin={}",matchBord.toString());
 
         model.addAttribute("match", matchTable);
         model.addAttribute("teacher",matchBord);
@@ -68,20 +60,17 @@ public class MatchController {
     }
 
     @GetMapping("/matching")
-    public String matchListForm(Model model, HttpServletRequest request){
-        session = request.getSession(false);
+    public String matchListForm(Model model, HttpSession session){
         Long studentId = (Long)session.getAttribute("loginId");
         List<MatchTableBoardListDTO> matches = matchService.matchList(studentId);
-        log.debug("matches={}", matches.toString());
+
         model.addAttribute("matches", matches);
         return "matchingTableList";
     }
 
     @PostMapping("/matching")
-    public String matchList(@RequestParam String search,
-                            @RequestParam String type,
-                            Model model, HttpServletRequest request){
-        session = request.getSession(false);
+    public String matchList(@RequestParam String search, @RequestParam String type,
+                            Model model, HttpSession session){
         Long studentId = (Long)session.getAttribute("loginId");
         List<MatchTableBoardListDTO> matches = matchService.matchListWithType(studentId, type, search);
         model.addAttribute("matches", matches);
