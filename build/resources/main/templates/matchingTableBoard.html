@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>POLC 대학생과외</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+</head>
+<body>
+    <div class="container" style="max-width: 600px">
+        <div class="py-5 text-center">
+            <h2>PLOC 대학생 과외</h2>
+        </div>
+        <div class="row mb-3">
+            <label for="name" class="col-sm-2 col-form-label">이름</label>
+            <div class="col-sm-10">
+                <input type="text" id="name" class="form-control" disabled th:field="${teacher.name}" readonly>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="university" class="col-sm-2 col-form-label">학교</label>
+            <div class="col-sm-10">
+                <input type="text" id="university" class="form-control"disabled th:field="${teacher.teacher.university}" readonly>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="subject" class="col-sm-2 col-form-label">과목</label>
+            <div class="col-sm-10">
+                <input type="text" id="subject" class="form-control" th:field="${teacher.teacher.subject}" disabled readonly>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="wageOfDay" class="col-sm-2 col-form-label">일급</label>
+            <div class="col-sm-10">
+                <input type="text" id="wageOfDay" class="form-control" th:field="${{match.wageOfDay}}" disabled>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="timesOfWeek" class="col-sm-2 col-form-label">주횟수</label>
+            <div class="col-sm-10">
+                <input type="text" id="timesOfWeek" class="form-control" th:field="${match.timesOfWeek}" disabled>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <button class="btn w-100 btn-primary btn-lg text-white" th:onclick="|location.href='@{/matching}'|">목록으로</button>
+        </div>
+        <div class="row">
+            <button class="btn w-100 btn-secondary btn-lg text-white" th:onclick="|location.href='@{/}'|">홈으로</button>
+        </div>
+    </div>
+</body>
+</html>
